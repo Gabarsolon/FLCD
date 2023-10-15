@@ -26,6 +26,8 @@ c.constants
     <naturalnumber> := <nonzerodigit>|<number><digit>
     <numberconstant> ::= <naturalnumber>|+<naturalnumber>|-<naturalnumber>|0
 2.character
-    <character> ::= '<letter>|<digit>|_|!|@|...'
+    <character> ::= <letter>|<digit>|_|!|@|...
 3.string
-    <string> ::= " ""|<character>|<character><string>"
+    <string> ::= <character>|<character><string>
+
+
