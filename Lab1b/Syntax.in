@@ -1,8 +1,8 @@
-<decllist> ::= <declaration>|<declaration> "," <decllist> [= <constant>]
+<decllist> ::= <declaration>|<declaration> ","
 
 <constant> ::= <integer>|<character>|<string>
 
-<declaration> ::= define <identifier> " " <type>
+<declaration> ::= define <type> " " <identifier> <decllist> [= <constant>]
 
 <simpletype> ::= alpha|fibre|int
 
@@ -16,17 +16,17 @@ stmtlist ::= stmt | stmt ";" stmtlist
 
 stmt ::= simplstmt | structstmt
 
-simplstmt ::= assignstmt | iostmt
+<simplstmt> ::= <assignstmt> | <iostmt>
 
-assignstmt ::= IDENTIFIER ":=" expression
+<assignstmt> ::= <identifier>=<expression>
 
-expression ::= expression "+" term | term
+<expression> ::= ["("] <expression> (+|-|*|/) <expression> [")"] | <term>
 
-term ::= term "*" factor | factor
+<term> ::= <identifier>|<constant>
 
-factor ::= "(" expression ")" | IDENTIFIER
+<iostmt> ::= (read|write)"("<identifier>,<channel>")"
 
-iostmt ::= "READ" | "WRITE" "(" IDENTIFIER ")"
+<channel> ::= stdin|stdout
 
 structstmt ::= cmpdstmt | ifstmt | whilestmt
 

@@ -7,7 +7,7 @@ Lexic:
 a.Special symbols, representing:
 - operators 
      + - * / = < <== ==> > ===
-separators: () [] {} ; space 
+separators: () [] {} ; , space 
 -reserved words
     int alpha arrr fibre make if fi of ?prgr? read show define
     now persistent for while
