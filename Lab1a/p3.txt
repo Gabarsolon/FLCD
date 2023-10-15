@@ -1,0 +1,15 @@
+#difference of n numbers
+
+define int n;
+define int sum;
+let difference = 0;
+
+read(n, stdin);
+
+define (array of n) v;
+for element of v{
+    read(element, stdin);
+    difference -= element;
+}
+
+show(sum, stdout);
