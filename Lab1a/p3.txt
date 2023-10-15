@@ -6,7 +6,7 @@ let difference = 0;
 
 read(n, stdin);
 
-define (array of n) v;
+define arrr of n v;
 for element of v{
     read(element, stdin);
     difference -= element;

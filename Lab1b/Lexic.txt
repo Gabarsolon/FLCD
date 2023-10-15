@@ -9,8 +9,8 @@ a.Special symbols, representing:
      + - * / = < <== ==> > ===
 separators: () [] {} ; space 
 -reserved words
-    int alpha arrr fibre make if fi of prgr read show define
-    now fickle while show
+    int alpha arrr fibre make if fi of ?prgr? read show define
+    now persistent for while
 
 b.identifiers
 -a sequence of letters and digits, such that the first character is a letter or underline; the rule is:
@@ -24,9 +24,9 @@ c.constants
 1.integer - rule:
     <nonzerodigit> ::= 1|2|...|9
     <naturalnumber> := <nonzerodigit>|<number><digit>
-    <numberconstant> ::= <naturalnumber>|+<naturalnumber>|-<naturalnumber>|0
+    <integer> ::= <naturalnumber>|+<naturalnumber>|-<naturalnumber>|0
 2.character
-    <character> ::= <letter>|<digit>|_|!|@|...
+    <character> ::= <letter>|<digit>|_|" "|!|@|...
 3.string
     <string> ::= <character>|<character><string>
 

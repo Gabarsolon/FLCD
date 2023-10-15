@@ -1,0 +1,39 @@
+<decllist> ::= <declaration>|<declaration> "," <decllist> [= <constant>]
+
+<constant> ::= <integer>|<character>|<string>
+
+<declaration> ::= define <identifier> " " <type>
+
+<simpletype> ::= alpha|fibre|int
+
+<arraydecl> ::= arrr of (<integer>|<identifier>) <identifier>
+
+<type>  ::= <simpletype>|<arraydecl>
+
+cmpdstmt ::= "BEGIN" stmtlist "END"
+
+stmtlist ::= stmt | stmt ";" stmtlist
+
+stmt ::= simplstmt | structstmt
+
+simplstmt ::= assignstmt | iostmt
+
+assignstmt ::= IDENTIFIER ":=" expression
+
+expression ::= expression "+" term | term
+
+term ::= term "*" factor | factor
+
+factor ::= "(" expression ")" | IDENTIFIER
+
+iostmt ::= "READ" | "WRITE" "(" IDENTIFIER ")"
+
+structstmt ::= cmpdstmt | ifstmt | whilestmt
+
+ifstmt ::= "IF" condition "THEN" stmt ["ELSE" stmt]
+
+whilestmt ::= "WHILE" condition "DO" stmt
+
+condition ::= expression RELATION expression
+
+RELATION ::= "<" | "<=" | "=" | "<>" | ">=" | ">"
