@@ -1,10 +1,8 @@
-<program> ::= <decllist>|<cmpdstmt>|(<program>|<declist>|<cmpdstmt>)
-
-<decllist> ::= <declaration>|<declaration> ","
+<program> ::= <cmpdstmt>|<program><cmpdstmt>
 
 <constant> ::= <integer>|<character>|<string>
 
-<declaration> ::= define <type> " " <identifier> <decllist> [= <constant>]
+<declaration> ::= define <type> <identifier> [= <constant>]
 
 <simpletype> ::= alpha|fibre|int
 
@@ -16,9 +14,9 @@
 
 <cmpdstmt> ::= {<stmtlist>}
 
-<stmtlist> ::= <stmt> | <stmt> ";" <stmtlist>
+<stmtlist> ::= <stmt> | <stmt> ; <stmtlist>
 
-<stmt> ::= <simplstmt> | <structstmt>
+<stmt> ::= <simplstmt> ; | <structstmt> | <declaration> ;
 
 <simplstmt> ::= <assignstmt> | <iostmt>
 
