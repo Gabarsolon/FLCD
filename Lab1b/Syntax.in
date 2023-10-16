@@ -2,19 +2,19 @@
 
 <constant> ::= <integer>|<character>|<string>
 
-<declaration> ::= define <type> <identifier> [= <constant>]
+<declaration> ::= "define" <type> <identifier> [= <constant>]
 
-<simpletype> ::= alpha|fibre|int
+<simpletype> ::= "alpha"|"fibre"|"int"
 
-<arraydecl> ::= arrr of (<integer>|<identifier>) <identifier>
+<arraydecl> ::= "arrr" "of" (<integer>|<identifier>) <identifier>
 
-<arrayaccess> ::= <identifier>"["(<identifier>|)"]"
+<arrayaccess> ::= <identifier>"["(<identifier>)"]"
 
 <type>  ::= <simpletype>|<arraydecl>
 
 <cmpdstmt> ::= {<stmtlist>}
 
-<stmtlist> ::= <stmt> | <stmt> ; <stmtlist>
+<stmtlist> ::= <stmt> | <stmt> ";" <stmtlist>
 
 <stmt> ::= <simplstmt> ; | <structstmt> | <declaration> ;
 
@@ -28,11 +28,11 @@
 
 <iostmt> ::= <readstmt>|<show>
 
-<readstmt> ::= read"("(<identifier>|<arrayaccess>),<channel>")"
+<readstmt> ::= "read""("(<identifier>|<arrayaccess>),<channel>")"
 
-<showstmt> ::= show"("(<identifier>|<arrayaccess>|<constant>),<channel>")"
+<showstmt> ::= "show""("(<identifier>|<arrayaccess>|<constant>),<channel>")"
 
-<channel> ::= stdin|stdout
+<channel> ::= "stdin"|"stdout"
 
 <structstmt> ::= <cmpdstmt> | <ifstmt> | <whilestmt> | <forstmt>
 
@@ -40,7 +40,7 @@
 
 <whilestmt> ::= <while> <condition> {<stmt>}
 
-<forstmt> ::= for <identifier> starts from (<identifier>|<arrayaccess>|<integer>) 
+<forstmt> ::= for (<identifier>|<declaration>) starts from (<identifier>|<arrayaccess>|<integer>) 
               transforms into <assignstmt>
               stops at <condition>
               {<stmt>}

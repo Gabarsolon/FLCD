@@ -16,7 +16,7 @@ separators: () [] {} ; , space
 
 b.identifiers
 -a sequence of letters and digits, such that the first character is a letter or underline; the rule is:
-identifier = letter|underline|(letter|underline){letter}{underline}{digit}
+<identifier> ::= <letter>|<underline>|(<letter>|<underline>){<letter>}{<underline>}{<digit>}
 <digit> ::= 0|1|...|9
 <letter> ::= A|B|...|Z|a|b|...|z
 <alphabetitem> ::= <letter>|_|<digit>
@@ -28,8 +28,9 @@ c.constants
     <naturalnumber> := <nonzerodigit>|<naturalnumber><digit>
     <integer> ::= <naturalnumber>|+<naturalnumber>|-<naturalnumber>|0
 2.character
-    <character> ::= <letter>|<digit>|_|" "|!|@|$|%|&
+    <character> ::= '<letter>'|'<digit>'|'_'|' '|'!'|'@'|'$'|'%'|'&'
 3.string
-    <string> ::= <character>|<character><string>
+    <string> ::= "<character_aux>"|"<character_aux>"<string>
+    <character_aux>::=<letter>|<digit>|_| |!|@|$|%|&
 
 
