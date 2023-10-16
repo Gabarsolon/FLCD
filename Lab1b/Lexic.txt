@@ -2,6 +2,7 @@ Alphabet:
 a. Upper and lower case letters of the English alphabet (A-Z and a-z);
 b. Underline character '_';
 c. Decimal digits (0-9);
+d. Special characters !@$%&
 
 Lexic:
 a.Special symbols, representing:
