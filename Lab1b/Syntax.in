@@ -1,0 +1,52 @@
+<program> ::= <cmpdstmt>|<program><cmpdstmt>
+
+<constant> ::= <integer>|<character>|<string>
+
+<declaration> ::= define <type> <identifier> [= <constant>]
+
+<simpletype> ::= alpha|fibre|int
+
+<arraydecl> ::= arrr of (<integer>|<identifier>) <identifier>
+
+<arrayaccess> ::= <identifier>"["(<identifier>|)"]"
+
+<type>  ::= <simpletype>|<arraydecl>
+
+<cmpdstmt> ::= {<stmtlist>}
+
+<stmtlist> ::= <stmt> | <stmt> ; <stmtlist>
+
+<stmt> ::= <simplstmt> ; | <structstmt> | <declaration> ;
+
+<simplstmt> ::= <assignstmt> | <iostmt>
+
+<assignstmt> ::= (<identifier>|<arrayaccess>)=<expression>
+
+<expression> ::= ["("] <expression> (+|-|*|/) <expression> [")"] | <term>
+
+<term> ::= <identifier>|<arrayaccess>|<constant>
+
+<iostmt> ::= <readstmt>|<show>
+
+<readstmt> ::= read"("(<identifier>|<arrayaccess>),<channel>")"
+
+<showstmt> ::= show"("(<identifier>|<arrayaccess>|<constant>),<channel>")"
+
+<channel> ::= stdin|stdout
+
+<structstmt> ::= <cmpdstmt> | <ifstmt> | <whilestmt> | <forstmt>
+
+<ifstmt> ::= if <condition> {<stmt>} [fi {<stmt>}] 
+
+<whilestmt> ::= <while> <condition> {<stmt>}
+
+<forstmt> ::= for <identifier> starts from (<identifier>|<arrayaccess>|<integer>) 
+              transforms into <assignstmt>
+              stops at <condition>
+              {<stmt>}
+
+<condition> ::= <expression><relation><expression>
+
+<relation> ::= <|<==|==>|>|===|and|or|not
+
+<comment> ::= #<string>#
