@@ -1,3 +1,5 @@
+<program> ::= <decllist>|<cmpdstmt>|(<program>|<declist>|<cmpdstmt>)
+
 <decllist> ::= <declaration>|<declaration> ","
 
 <constant> ::= <integer>|<character>|<string>
@@ -8,32 +10,41 @@
 
 <arraydecl> ::= arrr of (<integer>|<identifier>) <identifier>
 
+<arrayaccess> ::= <identifier>"["(<identifier>|)"]"
+
 <type>  ::= <simpletype>|<arraydecl>
 
-cmpdstmt ::= "BEGIN" stmtlist "END"
+<cmpdstmt> ::= {<stmtlist>}
 
-stmtlist ::= stmt | stmt ";" stmtlist
+<stmtlist> ::= <stmt> | <stmt> ";" <stmtlist>
 
-stmt ::= simplstmt | structstmt
+<stmt> ::= <simplstmt> | <structstmt>
 
 <simplstmt> ::= <assignstmt> | <iostmt>
 
-<assignstmt> ::= <identifier>=<expression>
+<assignstmt> ::= (<identifier>|<arrayaccess>)=<expression>
 
 <expression> ::= ["("] <expression> (+|-|*|/) <expression> [")"] | <term>
 
-<term> ::= <identifier>|<constant>
+<term> ::= <identifier>|<arrayaccess>|<constant>
 
-<iostmt> ::= (read|write)"("<identifier>,<channel>")"
+<iostmt> ::= (read|write)"("(<identifier>|<arrayaccess>),<channel>")"
 
 <channel> ::= stdin|stdout
 
-structstmt ::= cmpdstmt | ifstmt | whilestmt
+<structstmt> ::= <cmpdstmt> | <ifstmt> | <whilestmt> | <forstmt>
 
-ifstmt ::= "IF" condition "THEN" stmt ["ELSE" stmt]
+<ifstmt> ::= if <condition> {<stmt>} [fi {<stmt>}] 
 
-whilestmt ::= "WHILE" condition "DO" stmt
+<whilestmt> ::= <while> <condition> {<stmt>}
 
-condition ::= expression RELATION expression
+<forstmt> ::= for <identifier> starts from (<identifier>|<arrayaccess>|<integer>) 
+              transforms into <assignstmt>
+              stops at <condition>
+              {<stmt>}
 
-RELATION ::= "<" | "<=" | "=" | "<>" | ">=" | ">"
+<condition> ::= <expression><relation><expression>
+
+<relation> ::= <|<==|==>|>|===|and|or|not
+
+<comment> ::= #<string>#

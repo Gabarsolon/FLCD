@@ -1,4 +1,4 @@
-#check prime number
+#check prime number#
 
 define int n;
 

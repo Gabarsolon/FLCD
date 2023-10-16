@@ -1,4 +1,4 @@
-#minimum of three numbers
+#minimum of three numbers#
 
 define int a, b, c;
 
@@ -8,7 +8,7 @@ read(c, stdin);
 
 define int minmimum_between_a_b;
 
-#lexical error: "daca" isn't a keyword, operator, separator, constant or identifier
+#lexical error: "daca" isn't a keyword, operator, separator, constant or identifier#
 daca a < b {
     minmimum_between_a_b = a;
 }
