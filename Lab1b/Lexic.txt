@@ -25,7 +25,7 @@ identifier = letter|underline|(letter|underline){letter}{underline}{digit}
 c.constants
 1.integer - rule:
     <nonzerodigit> ::= 1|2|...|9
-    <naturalnumber> := <nonzerodigit>|<number><digit>
+    <naturalnumber> := <nonzerodigit>|<naturalnumber><digit>
     <integer> ::= <naturalnumber>|+<naturalnumber>|-<naturalnumber>|0
 2.character
     <character> ::= <letter>|<digit>|_|" "|!|@|$|%|&
