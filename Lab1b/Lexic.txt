@@ -16,12 +16,10 @@ separators: () [] {} ; , space
 
 b.identifiers
 -a sequence of letters and digits, such that the first character is a letter or underline; the rule is:
-<identifier> ::= <letter>|<underline>|<letter><digit><identifier>|<underline><digit><identifier>|
-                 <letter><identifier>|<underline><identifier>|<identifier><digit>
+<identifier> ::= <letter>|_|<letter><digit><identifier>|_<digit><identifier>|
+                 <letter><identifier>|_<identifier>|<identifier><digit>
 <digit> ::= 0|1|...|9
 <letter> ::= A|B|...|Z|a|b|...|z
-<alphabetitem> ::= <letter>|_|<digit>
-<identifier> ::= <letter>|_|<identifier><alphabet_item>
 
 c.constants
 1.integer - rule:
