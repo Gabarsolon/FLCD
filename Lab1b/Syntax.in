@@ -26,17 +26,17 @@
 
 <assignstmt> ::= <identifier>=<expression>|<arrayaccess>=<expression>
 
-<expression> ::= <expression><operator><expression>| <term>
+<expression> ::= <term><operator><expression><term>| <term>
 
 <operator> := +|-|*|/
 
-<term> ::= <identifier>|<arrayaccess>|<constant>
+<term> ::= <identifier>|<arrayaccess>|<constant>R
 
 <iostmt> ::= <readstmt>|<show>
 
-<readstmt> ::= "read""("<identifier_or_arrayaccess>,<channel>")"
+<readstmt> ::= "read""("<identifier_or_arrayaccess>","<channel>")"
 
-<showstmt> ::= "show""("<variable_or_constant><channel>")"
+<showstmt> ::= "show""("<variable_or_constant>","<channel>")"
 
 <identifier_or_arrayaccess> = <identifier>|<arrayaccess>
 
