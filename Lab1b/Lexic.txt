@@ -6,11 +6,12 @@ c. Decimal digits (0-9);
 Lexic:
 a.Special symbols, representing:
 - operators 
-     + - * / = < <== ==> > ===
+     + - * / = != < <== ==> > ===
 separators: () [] {} ; , space 
 -reserved words
     int alpha arrr fibre make if fi of prgr read show define
-    now persistent for while and or not
+    now persistent for while and or not starts from transforms stops at
+    stdin stdout
 
 b.identifiers
 -a sequence of letters and digits, such that the first character is a letter or underline; the rule is:

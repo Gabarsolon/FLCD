@@ -28,7 +28,11 @@
 
 <term> ::= <identifier>|<arrayaccess>|<constant>
 
-<iostmt> ::= (read|write)"("(<identifier>|<arrayaccess>),<channel>")"
+<iostmt> ::= <readstmt>|<show>
+
+<readstmt> ::= read"("(<identifier>|<arrayaccess>),<channel>")"
+
+<showstmt> ::= show"("(<identifier>|<arrayaccess>|<constant>),<channel>")"
 
 <channel> ::= stdin|stdout
 
