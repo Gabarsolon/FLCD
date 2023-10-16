@@ -25,7 +25,8 @@ b.identifiers
 c.constants
 1.integer - rule:
     <nonzerodigit> ::= 1|2|...|9
-    <naturalnumber> := <nonzerodigit>|<naturalnumber><digit>
+    <naturalnumber> := <nonzerodigit>|<nonzerodigit><digit_sequence>
+    <digit_sequence>::=<digit>|<digit><digit_sequence>
     <integer> ::= <naturalnumber>|+<naturalnumber>|-<naturalnumber>|0
 2.character
     <character> ::= '<letter>'|'<digit>'|'_'|' '|'!'|'@'|'$'|'%'|'&'
