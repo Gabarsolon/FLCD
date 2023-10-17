@@ -1,0 +1,25 @@
+#difference of n numbers#
+
+define int n;
+define int sum;
+let difference = 0;
+
+read(n, stdin);
+
+define arrr of n v;
+
+for index starts from 0
+    transforms into index = index + 1
+    stops at index < n
+    {
+        read(v[index], stdin);
+    }
+
+for index starts from 0
+    transforms into index = index + 1
+    stops at index < n
+    {
+        difference -= v[index];
+    }
+
+show(difference, stdout);
