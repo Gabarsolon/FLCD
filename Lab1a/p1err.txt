@@ -1,6 +1,8 @@
 #minimum of three numbers#
 
-define int a, b, c;
+define int a;
+define int b;
+define int c;
 
 read(a, stdin);
 read(b, stdin);

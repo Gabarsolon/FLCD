@@ -7,7 +7,7 @@ d. Special characters !@$%&
 Lexic:
 a.Special symbols, representing:
 - operators 
-     + - * / = != < <== ==> > ===
+     + - * / = != < <== ==> > === += -=
 separators: () [] {} ; , space 
 -reserved words
     int alpha arrr fibre make if fi of prgr read show define
