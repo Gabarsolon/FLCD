@@ -1,13 +1,14 @@
+//A node containing the key-value pair
 public class HashNode<K, V>{
     K key;
     V value;
-    final int hashCode;
+    final int keyHashCode;
+    //The next node int the chain
+    HashNode<K,V> nextNode;
 
-    HashNode<K,V> next;
-
-    public HashNode(K key, V value, int hashCode) {
+    public HashNode(K key, V value, int keyHashCode) {
         this.key = key;
         this.value = value;
-        this.hashCode = hashCode;
+        this.keyHashCode = keyHashCode;
     }
 }
