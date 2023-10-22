@@ -22,19 +22,23 @@ public class SymbolTable<K, V> {
             bucketArray.add(null);
     }
 
+    //O(1)
     public int size() {
         return numberOfElements;
     }
 
+    //O(1)
     public boolean isEmpty() {
         return numberOfElements == 0;
     }
 
+    //O(1)
     private int hashCode(K key) {
         //generate a hash code for the given key using the built-in Java function
         return Objects.hashCode(key);
     }
 
+    //O(1)
     private int getBucketIndex(K key) {
         int hashCode = hashCode(key);
         //find the bucket for the key coresponding to its hash code
@@ -44,11 +48,14 @@ public class SymbolTable<K, V> {
         return index;
     }
 
+    //O(1)
     private boolean elementIsEqualToNode(HashNode<K, V> node, K key, int keyHashCode) {
         //check if a key is equal to a node and if it has the same hash code with it
         return node.key.equals(key) && node.keyHashCode == keyHashCode;
     }
 
+    //alpha = numberOfElements/numberOfBuckets
+    //O(numberOfElements + 1/(1-alpha))
     private void resize() {
         //save a copy of
         ArrayList<HashNode<K, V>> oldBucketArray = new ArrayList<>(bucketArray);
@@ -73,6 +80,8 @@ public class SymbolTable<K, V> {
 
     }
 
+    //alpha = numberOfElements/numberOfBuckets
+    //O(1/(1-alpha))
     public V get(K key) {
         //get the index of the bucket corresponding to the given key and its hash code
         int bucketIndex = getBucketIndex(key);
@@ -89,6 +98,8 @@ public class SymbolTable<K, V> {
         return null;
     }
 
+    //alpha = numberOfElements/numberOfBuckets
+    //O(1/(1-alpha))
     public void add(K key, V value) {
         //get the index of the bucket corresponding to the given key and its hash code
         //in order to check if the key already exists
@@ -124,6 +135,8 @@ public class SymbolTable<K, V> {
         if ((double) numberOfElements / numberOfBuckets >= THRESHOLD) resize();
     }
 
+    //alpha = numberOfElements/numberOfBuckets
+    //O(1/(1-alpha))
     public V remove(K key) {
         //get the index of the bucket corresponding to the given key and its hash code
         int bucketIndex = getBucketIndex(key);
