@@ -22,8 +22,6 @@
 
 <stmt> ::= <simplstmt> | <structstmt> | <declaration>
 
-<boss_stmt> ::= "80$$" = <variable_or_constant>
-
 <simplstmt> ::= <assignstmt> | <iostmt>
 
 <assignstmt> ::= <identifier>=<expression>|<arrayaccess>=<expression>
