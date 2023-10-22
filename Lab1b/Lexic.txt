@@ -12,7 +12,7 @@ separators: () [] {} ; , space
 -reserved words
     int alpha arrr fibre make if fi of prgr read show define
     now persistent for while and or not starts from transforms stops at
-    stdin stdout
+    stdin stdout 80$$
 
 b.identifiers
 -a sequence of letters and digits, such that the first character is a letter or underline; the rule is:

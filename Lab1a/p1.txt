@@ -1,5 +1,7 @@
 #minimum of three numbers#
 
+80$$ = "ofc me";
+
 define int a;
 define int b;
 define int c;
