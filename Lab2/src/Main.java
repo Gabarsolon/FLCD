@@ -14,8 +14,7 @@ public class Main {
         System.out.println(symbolTable.remove("b"));
         System.out.println(symbolTable.get("b"));
         System.out.println(symbolTable.get("3"));
-        if (symbolTable.get("a") == null)
-            symbolTable.add("a", 6);
+        System.out.println(symbolTable.add("a", 6));
         System.out.println(symbolTable.get("a"));
     }
 }

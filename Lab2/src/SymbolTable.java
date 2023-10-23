@@ -13,7 +13,8 @@ public class SymbolTable<K, V> {
 
     public SymbolTable() {
         bucketArray = new ArrayList<>();
-        numberOfBuckets = 10;
+        //the number of buckets will be a prime number in order to have a more uniformly distribution
+        numberOfBuckets = 2;
         //initially we don't have any elements
         numberOfElements = 0;
 
@@ -62,8 +63,8 @@ public class SymbolTable<K, V> {
 
         //empty the current bucket array
         bucketArray = new ArrayList<>();
-        //double the capacity
-        numberOfBuckets = 2 * numberOfBuckets;
+        //change the number of buckets to a prime number greater than the current value
+        numberOfBuckets = Prime.nextPrimeAfter(numberOfBuckets);
         //reinitialize the bucket array
         numberOfElements = 0;
         for (int i = 0; i < numberOfBuckets; i++)
@@ -100,7 +101,7 @@ public class SymbolTable<K, V> {
 
     //alpha = numberOfElements/numberOfBuckets
     //O(1/(1-alpha))
-    public void add(K key, V value) {
+    public V add(K key, V value) {
         //get the index of the bucket corresponding to the given key and its hash code
         //in order to check if the key already exists
         int bucketIndex = getBucketIndex(key);
@@ -109,10 +110,9 @@ public class SymbolTable<K, V> {
         //get the first node from the bucket's linked list
         HashNode<K, V> head = bucketArray.get(bucketIndex);
         while (head != null) {
-            //if the key already exists then change its value to the new one
+            //if the key already exists then return its existing value
             if (elementIsEqualToNode(head, key, hashCode)) {
-                head.value = value;
-                return;
+                return head.value;
             }
             head = head.nextNode;
         }
@@ -133,6 +133,7 @@ public class SymbolTable<K, V> {
         //if the ratio between the number of elements and number of buckets is greater
         //than the threshold, then the bucket array will be resized
         if ((double) numberOfElements / numberOfBuckets >= THRESHOLD) resize();
+        return value;
     }
 
     //alpha = numberOfElements/numberOfBuckets
@@ -150,7 +151,7 @@ public class SymbolTable<K, V> {
         while (head != null) {
             //we stop searching when we find the node containing the key
             if (elementIsEqualToNode(head, key, hashCode)) break;
-            //keep a reference to the current nodeg
+            //keep a reference to the current node
             prev = head;
             //go to the next node
             head = head.nextNode;
