@@ -14,7 +14,7 @@ public class SymbolTable<K, V> {
     public SymbolTable() {
         bucketArray = new ArrayList<>();
         //the number of buckets will be a prime number in order to have a more uniformly distribution
-        numberOfBuckets = 2;
+        numberOfBuckets = 7;
         //initially we don't have any elements
         numberOfElements = 0;
 
