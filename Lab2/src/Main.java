@@ -1,5 +1,7 @@
+import java.io.IOException;
+
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         SymbolTable<String>symbolTable = new SymbolTable<>();
         System.out.println(symbolTable.isEmpty());
         symbolTable.add("a");
@@ -21,5 +23,6 @@ public class Main {
         pif.addIdentifierOrConstant("a", symbolTable.add("a"));
         pif.addOperatorSeparatorReservedWord("while");
         System.out.println(pif);
+        var scanner = new Scanner("src/programs/p1.txt");
     }
 }

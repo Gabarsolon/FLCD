@@ -1,0 +1,27 @@
+#minimum of three numbers#
+
+define int a;
+define int b;
+define int c;
+
+read(a, stdin);
+read(b, stdin);
+read(c, stdin);
+
+define int minmimum_between_a_b;
+
+#lexical error: "daca" isn't a keyword, operator, separator, constant or identifier#
+daca a < b {
+    minmimum_between_a_b = a;
+}
+fi {
+    minmimum_between_b_a = b;
+}
+
+if minmimum_between_a_b < c {
+    #lexical error: "."
+    show(minmimum_between_a_b . stdout);
+}
+fi {
+    show(c, stdout);
+}

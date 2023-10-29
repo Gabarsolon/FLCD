@@ -16,6 +16,8 @@ public class SymbolTable<T>{
     //The actually number of stored elements
     private int numberOfElements;
 
+
+
     public SymbolTable() {
         bucketArray = new ArrayList<>();
         //the number of buckets will be a prime number in order to have a more uniformly distribution
