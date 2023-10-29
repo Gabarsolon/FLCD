@@ -1,11 +1,16 @@
 import java.util.ArrayList;
 import java.util.Objects;
+//for documentation:
+//reg exp
+//data structure for pif
+//class diagram with all classes
+//1a -> One instance for st boss
 
-public class SymbolTable<K, V> {
+public class SymbolTable<T>{
     //the indicator which tells when to resize the bucket array
     private final double THRESHOLD = 0.75;
     //The array containing the buckets
-    private ArrayList<HashNode<K, V>> bucketArray;
+    private ArrayList<HashNode<T, Integer>> bucketArray;
     //The size of the bucketArray
     private int numberOfBuckets;
     //The actually number of stored elements
@@ -17,7 +22,6 @@ public class SymbolTable<K, V> {
         numberOfBuckets = 7;
         //initially we don't have any elements
         numberOfElements = 0;
-
         //initialize the bucker array by adding null nodes
         for (int i = 0; i < numberOfBuckets; i++)
             bucketArray.add(null);
@@ -34,13 +38,13 @@ public class SymbolTable<K, V> {
     }
 
     //O(1)
-    private int hashCode(K key) {
+    private int hashCode(T key) {
         //generate a hash code for the given key using the built-in Java function
         return Objects.hashCode(key);
     }
 
     //O(1)
-    private int getBucketIndex(K key) {
+    private int getBucketIndex(T key) {
         int hashCode = hashCode(key);
         //find the bucket for the key coresponding to its hash code
         int index = hashCode % numberOfBuckets;
@@ -50,7 +54,7 @@ public class SymbolTable<K, V> {
     }
 
     //O(1)
-    private boolean elementIsEqualToNode(HashNode<K, V> node, K key, int keyHashCode) {
+    private boolean elementIsEqualToNode(HashNode<T, Integer> node, T key, int keyHashCode) {
         //check if a key is equal to a node and if it has the same hash code with it
         return node.key.equals(key) && node.keyHashCode == keyHashCode;
     }
@@ -59,7 +63,7 @@ public class SymbolTable<K, V> {
     //O(numberOfElements + 1/(1-alpha))
     private void resize() {
         //save a copy of
-        ArrayList<HashNode<K, V>> oldBucketArray = new ArrayList<>(bucketArray);
+        ArrayList<HashNode<T, Integer>> oldBucketArray = new ArrayList<>(bucketArray);
 
         //empty the current bucket array
         bucketArray = new ArrayList<>();
@@ -71,9 +75,9 @@ public class SymbolTable<K, V> {
             bucketArray.add(null);
 
         //add again each element to the bucket array, each of them having maybe a new bucket assigned
-        for (HashNode<K, V> headNode : oldBucketArray) {
+        for (HashNode<T, Integer> headNode : oldBucketArray) {
             while (headNode != null) {
-                add(headNode.key, headNode.value);
+                add(headNode.key);
                 //get the next node
                 headNode = headNode.nextNode;
             }
@@ -83,13 +87,13 @@ public class SymbolTable<K, V> {
 
     //alpha = numberOfElements/numberOfBuckets
     //O(1/(1-alpha))
-    public V get(K key) {
+    public Integer get(T key) {
         //get the index of the bucket corresponding to the given key and its hash code
         int bucketIndex = getBucketIndex(key);
         int hashCode = hashCode(key);
 
         //get the first node from the bucket's linked list
-        HashNode<K, V> head = bucketArray.get(bucketIndex);
+        HashNode<T, Integer> head = bucketArray.get(bucketIndex);
         while (head != null) {
             //if the key exists in a node then we return its value
             if (elementIsEqualToNode(head, key, hashCode)) return head.value;
@@ -101,14 +105,14 @@ public class SymbolTable<K, V> {
 
     //alpha = numberOfElements/numberOfBuckets
     //O(1/(1-alpha))
-    public V add(K key, V value) {
+    public Integer add(T key) {
         //get the index of the bucket corresponding to the given key and its hash code
         //in order to check if the key already exists
         int bucketIndex = getBucketIndex(key);
         int hashCode = hashCode(key);
 
         //get the first node from the bucket's linked list
-        HashNode<K, V> head = bucketArray.get(bucketIndex);
+        HashNode<T, Integer> head = bucketArray.get(bucketIndex);
         while (head != null) {
             //if the key already exists then return its existing value
             if (elementIsEqualToNode(head, key, hashCode)) {
@@ -119,12 +123,10 @@ public class SymbolTable<K, V> {
 
         //if the key wasn't already present in the table:
 
-        //increment the number of elements
-        numberOfElements++;
         //get the bucket node corresponding to this key
         head = bucketArray.get(bucketIndex);
         //create a new node containing the key, its associated value and its hashcode
-        HashNode<K, V> newNode = new HashNode<K, V>(key, value, hashCode);
+        HashNode<T, Integer> newNode = new HashNode(key, numberOfElements, hashCode);
         //put it to the beginning of the linked list
         newNode.nextNode = head;
         //replace the existing node from the position corresponding to the key with the new node
@@ -133,21 +135,23 @@ public class SymbolTable<K, V> {
         //if the ratio between the number of elements and number of buckets is greater
         //than the threshold, then the bucket array will be resized
         if ((double) numberOfElements / numberOfBuckets >= THRESHOLD) resize();
-        return value;
+        //increment the number of elements
+        numberOfElements++;
+        return numberOfElements - 1;
     }
 
     //alpha = numberOfElements/numberOfBuckets
     //O(1/(1-alpha))
-    public V remove(K key) {
+    public Integer remove(T key) {
         //get the index of the bucket corresponding to the given key and its hash code
         int bucketIndex = getBucketIndex(key);
         int hashCode = hashCode(key);
 
         //get the first node from the bucket's linked list
-        HashNode<K, V> head = bucketArray.get(bucketIndex);
+        HashNode<T, Integer> head = bucketArray.get(bucketIndex);
 
         //keep track of the node that's before the node containing the key
-        HashNode<K, V> prev = null;
+        HashNode<T, Integer> prev = null;
         while (head != null) {
             //we stop searching when we find the node containing the key
             if (elementIsEqualToNode(head, key, hashCode)) break;
