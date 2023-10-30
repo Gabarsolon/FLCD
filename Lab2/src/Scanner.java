@@ -1,16 +1,13 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 public class Scanner {
     String COMMENT_CHARACTER = "#";
-    String STRING_DEIMITER = "\"";
+    String STRING_DELIMITER = "\"";
     String CHARACTER_DELIMITER = "'";
     List<String> separators = Arrays.asList(
             "(", ")",
@@ -18,11 +15,11 @@ public class Scanner {
             "{", "}",
             ";", " ", ",", "\n", "\'", "\"", "#"
     );
-    List<String> operators = Arrays.asList("+", "-", "*", "/", "%", "=", "<", "<=", "==>", ">", "===", "+=", "-=");
+    List<String> operators = Arrays.asList("+", "-", "*", "/", "%", "===", "=", "<==", "<", "==>", ">", "+=", "-=");
     List<String> reservedWord = Arrays.asList(
             "int", "alpha", "arrr", "fibre", "make", "if", "fi", "of", "prgr",
             "read", "show", "define", "now", "persistent", "for", "while", "and",
-            "or", "not", "starts", "from", "transforms", "stops", "at", "stdin", "stdout");
+            "or", "not", "starts", "from", "transforms", "stops", "at", "stdin", "stdout", "into");
 
     String delimiters = separators.stream().reduce("", (a, b) -> a + b) +
             operators.stream().reduce("", (a, b) -> a + b);
@@ -52,45 +49,53 @@ public class Scanner {
                 return;
     }
 
-    public String getStringConstant(StringTokenizer tokenizer) {
+    public void addStringConstant(StringTokenizer tokenizer) {
         var stringBuilder = new StringBuilder();
         while (tokenizer.hasMoreTokens()) {
             String currentToken = tokenizer.nextToken();
             if (currentToken.equals(" "))
                 continue;
-            if (currentToken.equals(STRING_DEIMITER))
-                return stringBuilder.toString();
+            if (currentToken.equals(STRING_DELIMITER)) {
+                String stringConstant = "\"%s\"".formatted(stringBuilder.toString());
+                pif.addIdentifierOrConstant(stringBuilder.toString(), symbolTable.add(stringConstant));
+                pif.addOperatorSeparatorReservedWord(currentToken);
+
+            }
             stringBuilder.append(currentToken);
         }
-        return "\"%s\"".formatted(stringBuilder.toString());
     }
 
     private boolean isIntegerConstant(String token) {
         return Pattern.compile("^0|([+-]?[1-9][0-9]*)$").matcher(token).matches();
     }
 
-    public void scan() {
+    public void scan() throws IOException {
         var lexicalErrorsStringBuilder = new StringBuilder();
         for (int lineIndex = 0; lineIndex < programLines.size(); lineIndex++) {
             String programLine = programLines.get(lineIndex);
             StringTokenizer tokenizer = new StringTokenizer(programLine, delimiters, true);
+
             while (tokenizer.hasMoreTokens()) {
                 String currentToken = tokenizer.nextToken();
                 if (currentToken.equals(" "))
                     continue;
                 if (currentToken.equals(COMMENT_CHARACTER))
                     skipComment(tokenizer);
-                else if (reservedWord.contains(currentToken) || operators.contains(currentToken) || separators.contains(currentToken))
+                else if (currentToken.equals(STRING_DELIMITER)) {
+                    pif.addOperatorSeparatorReservedWord(STRING_DELIMITER);
+                    addStringConstant(tokenizer);
+                } else if (currentToken.equals(CHARACTER_DELIMITER)) {
+                    pif.addOperatorSeparatorReservedWord(CHARACTER_DELIMITER);
+
+                    String charConstant = "'%s'".formatted(tokenizer.nextToken());
+                    pif.addIdentifierOrConstant(charConstant, symbolTable.add(charConstant));
+
+                    pif.addOperatorSeparatorReservedWord(CHARACTER_DELIMITER);
+                } else if (reservedWord.contains(currentToken) || operators.contains(currentToken) || separators.contains(currentToken))
                     pif.addOperatorSeparatorReservedWord(currentToken);
                 else if (isIdentifier(currentToken))
                     pif.addIdentifierOrConstant(currentToken, symbolTable.add(currentToken));
-                else if (currentToken.equals(STRING_DEIMITER)) {
-                    String stringConstant = getStringConstant(tokenizer);
-                    pif.addIdentifierOrConstant(stringConstant, symbolTable.add(stringConstant));
-                } else if (currentToken.equals(CHARACTER_DELIMITER)) {
-                    String charConstant = "'%s'".formatted(tokenizer.nextToken());
-                    pif.addIdentifierOrConstant(charConstant, symbolTable.add(charConstant));
-                } else if (isIntegerConstant(currentToken))
+                else if (isIntegerConstant(currentToken))
                     pif.addIdentifierOrConstant(currentToken, symbolTable.add(currentToken));
                 else
                     lexicalErrorsStringBuilder.append(("Lexical error on line %s, token %s is not " +
@@ -101,6 +106,38 @@ public class Scanner {
             System.out.println("Lexical correct");
         else
             System.out.println(lexicalErrorsStringBuilder);
-        System.out.println(pif);
+        outputToFiles();
+    }
+
+    public void outputToFiles() throws IOException {
+        String pifFilePath = "src/output/PIF.out";
+        String stFilePath = "src/output/ST.out";
+
+        File pifFile = new File(pifFilePath);
+        File stFile = new File(stFilePath);
+
+        pifFile.delete();
+        stFile.delete();
+
+        if (pifFile.createNewFile()) {
+            System.out.println("File created: " + pifFile.getName());
+        } else {
+            System.out.println("File already exists.");
+        }
+
+        if (stFile.createNewFile()) {
+            System.out.println("File created: " + stFile.getName());
+        } else {
+            System.out.println("File already exists.");
+        }
+
+        FileWriter pifFileWriter = new FileWriter(pifFilePath);
+        pifFileWriter.write(pif.toString());
+        pifFileWriter.close();
+
+        FileWriter stFileWriter = new FileWriter(stFilePath);
+        stFileWriter.write(symbolTable.toString());
+        stFileWriter.close();
     }
 }
+

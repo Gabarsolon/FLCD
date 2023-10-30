@@ -175,4 +175,17 @@ public class SymbolTable<T>{
         else prev.nextNode = head.nextNode;
         return head.value;
     }
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("  Symbol       Position  \n");
+        stringBuilder.append("-------------------------\n");
+        for (var node : bucketArray) {
+            while(node != null){
+                stringBuilder.append("%-20s %3d\n".formatted(node.key, node.value));
+                node = node.nextNode;
+            }
+        }
+        return stringBuilder.toString();
+    }
 }
