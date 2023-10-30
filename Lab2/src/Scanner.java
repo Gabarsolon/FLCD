@@ -1,7 +1,6 @@
 import java.io.*;
-import java.util.Arrays;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
@@ -16,13 +15,32 @@ public class Scanner {
             ";", " ", ",", "\n", "\'", "\"", "#"
     );
     List<String> operators = Arrays.asList("+", "-", "*", "/", "%", "===", "=", "<==", "<", "==>", ">", "+=", "-=");
-    List<String> reservedWord = Arrays.asList(
+    List<String> reservedWords = Arrays.asList(
             "int", "alpha", "arrr", "fibre", "make", "if", "fi", "of", "prgr",
             "read", "show", "define", "now", "persistent", "for", "while", "and",
             "or", "not", "starts", "from", "transforms", "stops", "at", "stdin", "stdout", "into");
 
     String delimiters = separators.stream().reduce("", (a, b) -> a + b) +
             operators.stream().reduce("", (a, b) -> a + b);
+
+    List<String> separatorsForPattern = Arrays.asList(
+            "\\(", "\\)",
+            "\\[", "\\]",
+            "\\{", "\\}",
+            ";", " ", ",", "\n", "'", "\"", "#"
+    );
+    List<String> opperatorsForPattern = Arrays.asList("\\+\\+", "--", "\\+", "-", "\\*", "/", "%", "===", "=", "<==", "<", "==>", ">", "\\+=", "-=");
+
+
+    StringBuilder patternBuilder = new StringBuilder()
+            .append("(")
+            .append(String.join("|", separatorsForPattern))
+            .append(")|(")
+            .append(String.join("|", opperatorsForPattern))
+            .append(")");
+
+    String regexPattern = patternBuilder.toString();
+    Pattern pattern = Pattern.compile(regexPattern);
 
     private SymbolTable<String> symbolTable;
     private PIF pif;
@@ -42,17 +60,17 @@ public class Scanner {
         return Pattern.compile("^[_a-zA-Z][_a-zA-Z0-9]*$").matcher(token).matches();
     }
 
-    private void skipComment(StringTokenizer tokenizer) {
-        while (tokenizer.hasMoreTokens())
+    private void skipComment(Iterator<String> tokenizer) {
+        while (tokenizer.hasNext())
             //stop when the current token is equal to the comment char
-            if (tokenizer.nextToken().equals(COMMENT_CHARACTER))
+            if (tokenizer.next().equals(COMMENT_CHARACTER))
                 return;
     }
 
-    public void addStringConstant(StringTokenizer tokenizer) {
+    public void addStringConstant(Iterator<String> tokenizer) {
         var stringBuilder = new StringBuilder();
-        while (tokenizer.hasMoreTokens()) {
-            String currentToken = tokenizer.nextToken();
+        while (tokenizer.hasNext()) {
+            String currentToken = tokenizer.next();
             if (currentToken.equals(" "))
                 continue;
             if (currentToken.equals(STRING_DELIMITER)) {
@@ -73,10 +91,21 @@ public class Scanner {
         var lexicalErrorsStringBuilder = new StringBuilder();
         for (int lineIndex = 0; lineIndex < programLines.size(); lineIndex++) {
             String programLine = programLines.get(lineIndex);
-            StringTokenizer tokenizer = new StringTokenizer(programLine, delimiters, true);
 
-            while (tokenizer.hasMoreTokens()) {
-                String currentToken = tokenizer.nextToken();
+            Matcher matcher = pattern.matcher(programLine);
+            List<String> tokens = new ArrayList<>();
+            int pos = 0;
+            while (matcher.find()) {
+                if (pos != matcher.start()) {
+                    tokens.add(programLine.substring(pos, matcher.start()));
+                }
+                tokens.add(matcher.group());
+                pos = matcher.end();
+            }
+            Iterator<String> tokenizer = tokens.stream().iterator();
+
+            while (tokenizer.hasNext()) {
+                String currentToken = tokenizer.next();
                 if (currentToken.equals(" "))
                     continue;
                 if (currentToken.equals(COMMENT_CHARACTER))
@@ -87,11 +116,11 @@ public class Scanner {
                 } else if (currentToken.equals(CHARACTER_DELIMITER)) {
                     pif.addOperatorSeparatorReservedWord(CHARACTER_DELIMITER);
 
-                    String charConstant = "'%s'".formatted(tokenizer.nextToken());
+                    String charConstant = "'%s'".formatted(tokenizer.next());
                     pif.addIdentifierOrConstant(charConstant, symbolTable.add(charConstant));
 
                     pif.addOperatorSeparatorReservedWord(CHARACTER_DELIMITER);
-                } else if (reservedWord.contains(currentToken) || operators.contains(currentToken) || separators.contains(currentToken))
+                } else if (reservedWords.contains(currentToken) || operators.contains(currentToken) || separators.contains(currentToken))
                     pif.addOperatorSeparatorReservedWord(currentToken);
                 else if (isIdentifier(currentToken))
                     pif.addIdentifierOrConstant(currentToken, symbolTable.add(currentToken));

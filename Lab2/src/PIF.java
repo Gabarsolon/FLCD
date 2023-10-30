@@ -5,7 +5,7 @@ import java.util.List;
 
 public class PIF {
     final Integer OPERATOR_SEPARATOR_RESERVEDWORD_POSITION = -1;
-    public List<Pair<String, Integer>> data = new ArrayList<>();
+    private List<Pair<String, Integer>> data = new ArrayList<>();
 
     public void addIdentifierOrConstant(String token, Integer positionInSymbolTable) {
         data.add(new Pair<>(token, positionInSymbolTable));

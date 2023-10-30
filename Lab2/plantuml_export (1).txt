@@ -1,0 +1,70 @@
+@startuml
+
+class HashNode<K,V>{
+  key: K
+  value: V
+  keyHashCode: int
+  nextNode: HashNode
+}
+
+class Prime{
+  isPrime(): boolean
+  nextPrime(number: int): int
+}
+
+class SymbolTable<T>{
+  -bucketArray: ArrayList<HashNode<T,int>>
+  -nubmerOfBuckets: int
+  -numberOfElements: int
+  
+  +add(key: T): int
+  +remove(key: T): V
+  +get(key: T): V
+  +size(): int
+  +isEmpty(): boolean
+  +toString(): String
+  
+  -resize(): void
+  -elementIsEqualToNode(node: HashNode<T,V>, key: T, keyHashCode: int)
+  -getBucketIndex(key: T)
+  -hashCode(key: T)
+  
+}
+
+class PIF{
+  -data: List<Pair<String,Integer>>
+
+  +addIdentifierOrConstant(token: String, positionInSymbolTable: int)
+  +addOperatorSeparatorReservedWord(token: String)
+  +toString(): String
+  
+}
+
+class Scanner{
+ separators: List<String>
+ operators: List<String>
+ reservedWords: List<String>
+ 
+ -pif: PIF
+ -symbolTable: SymbolTable<String>
+ -programLines: List<String>
+ 
+  +Scanner(programPath: String): Scanner 
+  +scan(): void
+ 
+ -isIdentifier(token: String): boolean
+ -skipComment(tokenizer: StringTokenizer): void
+ -addStringConstant(tokenizer: StringTokenizer): void
+ -isIntegerConstant(token: String): boolean
+ -outputToFIles(): void
+
+
+ 
+}
+
+HashNode o-- SymbolTable
+Prime o-- SymbolTable
+PIF o-- Scanner
+SymbolTable o-- Scanner
+
+@enduml
