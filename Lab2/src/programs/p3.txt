@@ -2,7 +2,7 @@
 
 define int n;
 define int sum;
-let difference = 0;
+difference = 0;
 
 read(n, stdin);
 

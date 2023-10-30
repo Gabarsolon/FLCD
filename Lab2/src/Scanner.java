@@ -39,8 +39,8 @@ public class Scanner {
             .append(String.join("|", opperatorsForPattern))
             .append(")");
 
-    String regexPattern = patternBuilder.toString();
-    Pattern pattern = Pattern.compile(regexPattern);
+    String splitPatternRegex = patternBuilder.toString();
+    Pattern pattern = Pattern.compile(splitPatternRegex);
 
     private SymbolTable<String> symbolTable;
     private PIF pif;
@@ -132,7 +132,7 @@ public class Scanner {
             }
         }
         if (lexicalErrorsStringBuilder.isEmpty())
-            System.out.println("Lexical correct");
+            System.out.println("Lexically correct");
         else
             System.out.println(lexicalErrorsStringBuilder);
         outputToFiles();

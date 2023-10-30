@@ -1,13 +1,14 @@
 Symbol Table Information:
 Data Structure: Hash Table
 Hash Table Size: 7
-Number of items: 5
+Number of items: 6
 Collision Resolution: Chaining
 
   Symbol       Position  
 -------------------------
-minmimum_between_a_b   3
-b                      1
-c                      2
-minmimum_between_b_a   4
-a                      0
+difference             2
+index                  5
+sum                    1
+n                      0
+v                      4
+0                      3
