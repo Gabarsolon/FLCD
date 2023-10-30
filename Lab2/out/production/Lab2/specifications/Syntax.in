@@ -1,0 +1,66 @@
+<program> ::= <cmpdstmt>|<program><cmpdstmt>
+
+<constant> ::= <integer>|<character>|<string>
+
+<declaration> ::= "define" <type> <identifier> | <declaration_and_assignment>
+
+<declaration_and_assignment> ::= "define" <type> <identifier>=<constant>
+
+<simpletype> ::= "alpha"|"fibre"|"int"
+
+<arraydecl> ::= "arrr" "of" <integer_constant_or_identifier> <identifier>
+
+<integer_constant_or_identifier> ::= <integer>|<identifier>
+
+<arrayaccess> ::= <identifier>"["<integer_constant_or_identifier>"]"
+
+<type>  ::= <simpletype>|<arraydecl>
+
+<cmpdstmt> ::= {<stmtlist>}
+
+<stmtlist> ::= <stmt> ";" | <stmt> ";" <stmtlist>
+
+<stmt> ::= <simplstmt> | <structstmt> | <declaration>
+
+<simplstmt> ::= <assignstmt> | <iostmt>
+
+<assignstmt> ::= <identifier>=<expression>|<arrayaccess>=<expression>
+
+<expression> ::= <term><operator><expression><term>| <term>
+
+<operator> := +|-|*|/
+
+<term> ::= <identifier>|<arrayaccess>|<constant>R
+
+<iostmt> ::= <readstmt>|<show>
+
+<readstmt> ::= "read""("<identifier_or_arrayaccess>","<channel>")"
+
+<showstmt> ::= "show""("<variable_or_constant>","<channel>")"
+
+<identifier_or_arrayaccess> = <identifier>|<arrayaccess>
+
+<variable_or_constant> = <identifier_or_arrayaccess>|<constant>
+
+<channel> ::= "stdin"|"stdout"
+
+<structstmt> ::= <cmpdstmt> | <ifstmt> | <whilestmt> | <forstmt>
+
+<ifstmt> ::= if <condition> {<stmt>} | if <condition> fi {<stmt>} | if <condition> fi <ifstmt>
+
+<whilestmt> ::= <while> <condition> {<stmt>}
+
+<forstmt> ::= for <identifier> starts from <variable_or_constant> 
+              transforms into <assignstmt>
+              stops at <condition>
+              {<stmt>}
+
+<condition> ::= <expression><relation><expression>
+
+<relation> ::= <|<==|==>|>|===|and|or|not
+
+<increment_or_decrement_variable> ::= <identifier_or_arrayaccess><increment_or_decrement><integer_constant_or_identifier>
+
+<increment_or_decrement> ::= "+="|"-="
+
+<comment> ::= #<string>#
