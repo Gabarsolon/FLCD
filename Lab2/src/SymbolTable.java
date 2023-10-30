@@ -178,6 +178,12 @@ public class SymbolTable<T>{
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Symbol Table Information:\n");
+        stringBuilder.append("Data Structure: Hash Table\n");
+        stringBuilder.append("Hash Table Size: %s\n".formatted(numberOfBuckets));
+        stringBuilder.append("Number of items: %s\n".formatted(numberOfElements));
+        stringBuilder.append("Collision Resolution: Chaining\n\n");
+
         stringBuilder.append("  Symbol       Position  \n");
         stringBuilder.append("-------------------------\n");
         for (var node : bucketArray) {

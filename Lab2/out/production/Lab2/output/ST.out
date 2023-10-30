@@ -1,0 +1,9 @@
+Symbol Table Information:Data Structure: Hash TableHash Table Size: 11Number of items: 8Collision Resolution: Chaining  Symbol       Position  
+-------------------------
+n                      5
+"Prime"                0
+d                      3
+"Notprime"             4
+0                      6
+2                      1
+3                      2
