@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 //for documentation:
 //reg exp
@@ -177,7 +179,9 @@ public class SymbolTable<T>{
     }
     @Override
     public String toString() {
+        List<HashNode<T, Integer>> items = new ArrayList<>();
         StringBuilder stringBuilder = new StringBuilder();
+
         stringBuilder.append("Symbol Table Information:\n");
         stringBuilder.append("Data Structure: Hash Table\n");
         stringBuilder.append("Hash Table Size: %s\n".formatted(numberOfBuckets));
@@ -188,10 +192,15 @@ public class SymbolTable<T>{
         stringBuilder.append("-------------------------\n");
         for (var node : bucketArray) {
             while(node != null){
-                stringBuilder.append("%-20s %3d\n".formatted(node.key, node.value));
+                items.add(node);
                 node = node.nextNode;
             }
         }
+
+        items.sort(Comparator.comparingInt(item -> item.value));
+
+        for(var item : items)
+            stringBuilder.append("%-20s %3d\n".formatted(item.key, item.value));
         return stringBuilder.toString();
     }
 }
