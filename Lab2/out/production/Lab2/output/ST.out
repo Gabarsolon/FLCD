@@ -7,9 +7,9 @@ Collision Resolution: Chaining
   Symbol       Position  
 -------------------------
 n                      4
-difference             0
+difference             1
 0                      6
-let                    3
-sum                    2
-index                  1
+sum                    3
+1                      0
+index                  2
 v                      5

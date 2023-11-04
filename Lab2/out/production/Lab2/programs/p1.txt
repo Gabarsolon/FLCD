@@ -7,18 +7,18 @@ define int c;
 read(a, stdin);
 read(b, stdin);
 read(c, stdin);
-
-define int minmimum_between_a_b;
+"fadfda"
+define int minimum_between_a_b;
 
 if a < b {
-    minmimum_between_a_b = a;
+    minimum_between_a_b = a;
 }
 fi {
-    minmimum_between_b_a = b;
+    minimum_between_b_a = b;
 }
 
-if minmimum_between_a_b < c {
-    show(minmimum_between_a_b, stdout);
+if minimum_between_a_b < c {
+    show(minimum_between_a_b, stdout);
 }
 fi {
     show(c, stdout);

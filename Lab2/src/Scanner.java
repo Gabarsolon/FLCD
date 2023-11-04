@@ -29,8 +29,7 @@ public class Scanner {
             "\\{", "\\}",
             ";", " ", ",", "\n", "'", "\"", "#"
     );
-    List<String> opperatorsForPattern = Arrays.asList("\\+\\+", "--", "\\+", "-", "\\*", "/", "%", "===", "=", "<==", "<", "==>", ">", "\\+=", "-=");
-
+    List<String> opperatorsForPattern = Arrays.asList("\\+\\+", "\\+=", "-=", "--", "\\+", "-", "\\*", "/", "%", "===", "=", "<==", "<", "==>", ">");
 
     StringBuilder patternBuilder = new StringBuilder()
             .append("(")
@@ -77,14 +76,14 @@ public class Scanner {
                 String stringConstant = "\"%s\"".formatted(stringBuilder.toString());
                 pif.addIdentifierOrConstant(stringBuilder.toString(), symbolTable.add(stringConstant));
                 pif.addOperatorSeparatorReservedWord(currentToken);
-
+                return;
             }
             stringBuilder.append(currentToken);
         }
     }
 
     private boolean isIntegerConstant(String token) {
-        return Pattern.compile("^0|([+-]?[1-9][0-9]*)$").matcher(token).matches();
+        return Pattern.compile("^0|(([+]|-)?[1-9][0-9]*)$").matcher(token).matches();
     }
 
     public void scan() throws IOException {
@@ -102,6 +101,8 @@ public class Scanner {
                 tokens.add(matcher.group());
                 pos = matcher.end();
             }
+            if(pos != programLine.length())
+                tokens.add(programLine.substring(pos, programLine.length()));
             Iterator<String> tokenizer = tokens.stream().iterator();
 
             while (tokenizer.hasNext()) {

@@ -19,7 +19,7 @@ fi {
 }
 
 if minmimum_between_a_b < c {
-    #lexical error: "virgula" isn't a keyword, operator, separator, constant or identifier#
+    #lexical error: "." isn't a keyword, operator, separator, constant or identifier#
     show(minmimum_between_a_b . stdout);
 }
 fi {

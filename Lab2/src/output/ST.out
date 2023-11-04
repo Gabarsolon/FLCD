@@ -1,14 +1,15 @@
 Symbol Table Information:
 Data Structure: Hash Table
-Hash Table Size: 7
-Number of items: 6
+Hash Table Size: 11
+Number of items: 8
 Collision Resolution: Chaining
 
   Symbol       Position  
 -------------------------
-difference             2
-index                  5
-sum                    1
-n                      0
-v                      4
-0                      3
+n                      4
+difference             1
+0                      6
+sum                    3
+1                      0
+index                  2
+v                      5
