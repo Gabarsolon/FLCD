@@ -74,19 +74,25 @@ public class SymbolTable<T>{
         //change the number of buckets to a prime number greater than the current value
         numberOfBuckets = Prime.nextPrimeAfter(numberOfBuckets);
         //reinitialize the bucket array
-        numberOfElements = 0;
         for (int i = 0; i < numberOfBuckets; i++)
             bucketArray.add(null);
 
         //add again each element to the bucket array, each of them having maybe a new bucket assigned
-        for (HashNode<T, Integer> headNode : oldBucketArray) {
-            while (headNode != null) {
-                add(headNode.key);
-                //get the next node
-                headNode = headNode.nextNode;
+        for (HashNode<T, Integer> currentNode : oldBucketArray) {
+            while(currentNode != null){
+                int bucketIndex = getBucketIndex(currentNode.key);
+                int hashCode = hashCode(currentNode.key);
+                //get the first node from the bucket's linked list
+                HashNode<T, Integer> head = bucketArray.get(bucketIndex);
+                //create a new node containing the key, its associated value and its hashcode
+                HashNode<T, Integer> newNode = new HashNode(currentNode.key, currentNode.value, hashCode);
+                //put it to the beginning of the linked list
+                newNode.nextNode = head;
+                //replace the existing node from the position corresponding to the key with the new node
+                bucketArray.set(bucketIndex, newNode);
+                currentNode = currentNode.nextNode;
             }
         }
-
     }
 
     //alpha = numberOfElements/numberOfBuckets

@@ -7,7 +7,7 @@ define int c;
 read(a, stdin);
 read(b, stdin);
 read(c, stdin);
-"fadfda"
+
 define int minimum_between_a_b;
 
 if a < b {

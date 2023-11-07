@@ -7,7 +7,7 @@ read(n, stdin);
 if n < 2{
     show("Not prime", stdout);
 }
-if n%2 === 0 and n not 2{
+if n%2 === 2 and n not 2{
     show("Not prime", stdout);
 }
 for d starts from 3
