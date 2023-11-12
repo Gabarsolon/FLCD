@@ -1,17 +1,14 @@
 import org.javatuples.Pair;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class FA {
     Set<String> states;
     Set<String> alphabet;
-    Map<Pair<String, String>, Object> transitions;
+    Map<Pair<String, Character>, Object> transitions;
     String initialState;
     Set<String> finalStates;
     boolean isDFA = true;
@@ -30,7 +27,7 @@ public class FA {
         while (!transition.equals("transition_set_stop")) {
             String[] transitionElements = transition.split(",");
             String currentState = transitionElements[0];
-            String alphabetElement = transitionElements[1];
+            Character alphabetElement = transitionElements[1].charAt(0);
             String nextState = transitionElements[2];
 
             transitions.compute(new Pair<>(currentState, alphabetElement), (key, previousNextStates) -> {
@@ -57,6 +54,18 @@ public class FA {
         bufferedReader.close();
     }
 
+    public boolean checkValidSequence(String sequence){
+        if(!isDFA)
+            return false;
+        String currentState = initialState;
+        for(var currentTerminal : sequence.toCharArray()){
+            String nextState = (String) transitions.get(new Pair<>(currentState, currentTerminal));
+            if(nextState == null)
+                return false;
+            currentState = nextState;
+        }
+        return finalStates.contains(currentState);
+    }
     public String statesToString() {
         var stringBuilder = new StringBuilder();
         stringBuilder.append("Q = ");
@@ -75,7 +84,7 @@ public class FA {
         var stringBuilder = new StringBuilder();
         transitions.forEach((state_alphabet_pair, nextState) -> {
             String currentState = state_alphabet_pair.getValue0();
-            String alphabetElement = state_alphabet_pair.getValue1();
+            Character alphabetElement = state_alphabet_pair.getValue1();
             stringBuilder.append("δ(%s,%s) = %s\n".formatted(currentState, alphabetElement, nextState));
         });
 

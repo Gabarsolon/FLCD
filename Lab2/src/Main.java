@@ -7,7 +7,6 @@ import static java.lang.System.exit;
 
 public class Main {
     static Scanner inputScanner = new Scanner(System.in);
-
     static LexicalScanner scanner;
 
     static {
@@ -31,7 +30,8 @@ public class Main {
     public static Map<Integer, String> menuOptionsMap = Map.of(
             1, "scan",
             2, "display_fa",
-            3, "quit"
+            3, "check_seq",
+            0, "quit"
     );
     public static Map<Integer, String> faMenuOptionsMap = Map.of(
             1, "states",
@@ -39,13 +39,14 @@ public class Main {
             3, "transitions",
             4, "initial_state",
             5, "final_states",
-            6, "go_back"
+            0, "go_back"
     );
 
     public static void printMenu() {
         System.out.println("1.Scan program file");
         System.out.println("2.Display FA elements");
-        System.out.println("3.Quit");
+        System.out.println("3.Check valid sequence");
+        System.out.println("0.Quit");
         System.out.print("Pick an option: ");
     }
 
@@ -55,7 +56,7 @@ public class Main {
         System.out.println("3.Transitions");
         System.out.println("4.Initial state");
         System.out.println("5.Final states");
-        System.out.println("6.Go back");
+        System.out.println("0.Go back");
         System.out.print("Pick an option: ");
     }
 
@@ -67,14 +68,18 @@ public class Main {
                 scanner.scan();
                 break;
             case "display_fa":
-                while(true){
+                while (true) {
                     printFAMenu();
                     String faMenuOption = faMenuOptionsMap.get(inputScanner.nextInt());
-                    if(faMenuOption == "go_back")
+                    if (faMenuOption == "go_back")
                         break;
                     handleDisplayFAMenu(faMenuOption);
                 }
                 break;
+            case "check_seq":
+                System.out.print("Input sequence: ");
+                String sequence = inputScanner.next();
+                System.out.println(fa.checkValidSequence(sequence));
             case "quit":
                 exit(0);
                 break;
