@@ -40,7 +40,7 @@ class PIF{
   
 }
 
-class Scanner{
+class LexicalScanner{
  separators: List<String>
  operators: List<String>
  reservedWords: List<String>
@@ -49,7 +49,7 @@ class Scanner{
  -symbolTable: SymbolTable<String>
  -programLines: List<String>
  
-  +Scanner(programPath: String): Scanner 
+  +LexicalScanner(programPath: String): LexicalScanner
   +scan(): void
  
  -isIdentifier(token: String): boolean
@@ -64,7 +64,7 @@ class Scanner{
 
 HashNode o-- SymbolTable
 Prime o-- SymbolTable
-PIF o-- Scanner
-SymbolTable o-- Scanner
+PIF o-- LexicalScanner
+SymbolTable o-- LexicalScanner
 
 @enduml

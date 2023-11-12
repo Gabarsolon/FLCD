@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class Scanner {
+public class LexicalScanner {
     String COMMENT_CHARACTER = "#";
     String STRING_DELIMITER = "\"";
     String CHARACTER_DELIMITER = "'";
@@ -46,7 +46,7 @@ public class Scanner {
     private String programPath;
     private List<String> programLines;
 
-    public Scanner(String programPath) throws FileNotFoundException {
+    public LexicalScanner(String programPath) throws FileNotFoundException {
         symbolTable = new SymbolTable<>();
         pif = new PIF();
 
