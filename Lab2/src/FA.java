@@ -5,13 +5,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class FA {
     Set<String> states;
     Set<String> alphabet;
-    Map<Pair<String, String>, String> transitions;
+    Map<Pair<String, String>, Object> transitions;
     String initialState;
     Set<String> finalStates;
+    boolean isDFA = true;
 
     public FA(String faFilePath) throws IOException {
         var bufferedReader = new BufferedReader(new FileReader(faFilePath));
@@ -29,7 +32,20 @@ public class FA {
             String currentState = transitionElements[0];
             String alphabetElement = transitionElements[1];
             String nextState = transitionElements[2];
-            transitions.put(new Pair<>(currentState, alphabetElement), nextState);
+
+            transitions.compute(new Pair<>(currentState, alphabetElement), (key, previousNextStates) -> {
+                        if (previousNextStates == null)
+                            return nextState;
+                        else if (previousNextStates instanceof String){
+                            isDFA = false;
+                            return new ArrayList<>(Arrays.asList(previousNextStates, nextState));
+                        }
+                        List<String> states = (List<String>) previousNextStates;
+                        states.add(nextState);
+                        return states;
+                    }
+            );
+
             transition = bufferedReader.readLine().replace("\n", "");
         }
 
@@ -48,14 +64,14 @@ public class FA {
         return stringBuilder.toString();
     }
 
-    public String alphabetToString(){
+    public String alphabetToString() {
         var stringBuilder = new StringBuilder();
         stringBuilder.append("Σ = ");
         stringBuilder.append(alphabet.toString().replace("[", "{").replace("]", "}"));
         return stringBuilder.toString();
     }
 
-    public String transitionsToString(){
+    public String transitionsToString() {
         var stringBuilder = new StringBuilder();
         transitions.forEach((state_alphabet_pair, nextState) -> {
             String currentState = state_alphabet_pair.getValue0();
@@ -69,11 +85,11 @@ public class FA {
         return stringBuilder.toString();
     }
 
-    public String initialStateToString(){
+    public String initialStateToString() {
         return "q0 = %s".formatted(initialState);
     }
 
-    public String finalStatesToString(){
+    public String finalStatesToString() {
         var stringBuilder = new StringBuilder();
         stringBuilder.append("F = ");
         stringBuilder.append(finalStates.toString().replace("[", "{").replace("]", "}"));
