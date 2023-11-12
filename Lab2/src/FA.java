@@ -33,7 +33,7 @@ public class FA {
             transitions.compute(new Pair<>(currentState, alphabetElement), (key, previousNextStates) -> {
                         if (previousNextStates == null)
                             return nextState;
-                        else if (previousNextStates instanceof String){
+                        else if (previousNextStates instanceof String) {
                             isDFA = false;
                             return new ArrayList<>(Arrays.asList(previousNextStates, nextState));
                         }
@@ -54,18 +54,27 @@ public class FA {
         bufferedReader.close();
     }
 
-    public boolean checkValidSequence(String sequence){
-        if(!isDFA)
-            return false;
+    public String checkValidSequence(String sequence) {
+        if (!isDFA)
+            return "The FA is not deterministic (DFA)";
+        var stringBuilder = new StringBuilder();
         String currentState = initialState;
-        for(var currentTerminal : sequence.toCharArray()){
+        int sequenceIndex = 0;
+        for (var currentTerminal : sequence.toCharArray()) {
+            stringBuilder.append("(%s, %s)|-".formatted(currentState, sequence.substring(sequenceIndex)));
             String nextState = (String) transitions.get(new Pair<>(currentState, currentTerminal));
-            if(nextState == null)
-                return false;
+            if (nextState == null)
+                return "Sequence is not valid";
             currentState = nextState;
+            sequenceIndex++;
         }
-        return finalStates.contains(currentState);
+        if (finalStates.contains(currentState))
+            stringBuilder.append("(%s, ε)".formatted(currentState));
+        else
+            return "Sequence is not valid";
+        return stringBuilder.toString();
     }
+
     public String statesToString() {
         var stringBuilder = new StringBuilder();
         stringBuilder.append("Q = ");
