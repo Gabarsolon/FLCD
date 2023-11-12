@@ -1,7 +1,7 @@
 Symbol Table Information:
 Data Structure: Hash Table
 Hash Table Size: 11
-Number of items: 8
+Number of items: 7
 Collision Resolution: Chaining
 
   Symbol       Position  
