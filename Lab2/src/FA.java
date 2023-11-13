@@ -93,9 +93,9 @@ public class FA {
             }
             return null;
         }
-        List<String> nextStatesList = (List<String>) nextState;
-        for (var state : nextStatesList) {
-            String goNextSequence = getMovesForSequenceRecursive(state, sequence.substring(1));
+        List<String> potentialNextStateList = (List<String>) nextState;
+        for (var potentialNextState : potentialNextStateList) {
+            String goNextSequence = getMovesForSequenceRecursive(potentialNextState, sequence.substring(1));
             if (goNextSequence != null) {
                 return "(%s, %s)|-".formatted(currentState, sequence) + goNextSequence;
             }
