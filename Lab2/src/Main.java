@@ -1,4 +1,3 @@
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Scanner;
@@ -11,8 +10,8 @@ public class Main {
 
     static {
         try {
-            scanner = new LexicalScanner("src/programs/p2.txt");
-        } catch (FileNotFoundException e) {
+            scanner = new LexicalScanner("src/programs/p1.txt");
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -21,7 +20,7 @@ public class Main {
 
     static {
         try {
-            fa = new FA("src/specifications/FA_integer_constant.in");
+            fa = new FA("src/specifications/FA.in");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -79,7 +78,7 @@ public class Main {
             case "check_seq":
                 System.out.print("Input sequence: ");
                 String sequence = inputScanner.next();
-                System.out.println(fa.checkValidSequence(sequence));
+                System.out.println(fa.getMovesForSequence(sequence));
                 break;
             case "quit":
                 exit(0);

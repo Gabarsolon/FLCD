@@ -41,14 +41,19 @@ public class LexicalScanner {
     String splitPatternRegex = patternBuilder.toString();
     Pattern pattern = Pattern.compile(splitPatternRegex);
 
+    FA faForIdentifiers;
+    FA faForIntegerConstants;
+
     private SymbolTable<String> symbolTable;
     private PIF pif;
     private String programPath;
     private List<String> programLines;
 
-    public LexicalScanner(String programPath) throws FileNotFoundException {
+    public LexicalScanner(String programPath) throws IOException {
         symbolTable = new SymbolTable<>();
         pif = new PIF();
+        faForIdentifiers = new FA("src/specifications/FA_identifier.in");
+        faForIntegerConstants = new FA("src/specifications/FA_integer_constant.in");
 
         this.programPath = programPath;
         var bufferedReader = new BufferedReader(new FileReader(programPath));
@@ -56,7 +61,8 @@ public class LexicalScanner {
     }
 
     private boolean isIdentifier(String token) {
-        return Pattern.compile("^[_a-zA-Z][_a-zA-Z0-9]*$").matcher(token).matches();
+//        return Pattern.compile("^[_a-zA-Z][_a-zA-Z0-9]*$").matcher(token).matches();
+        return faForIdentifiers.isSequenceValid(token);
     }
 
     private void skipComment(Iterator<String> tokenizer) {
@@ -83,7 +89,8 @@ public class LexicalScanner {
     }
 
     private boolean isIntegerConstant(String token) {
-        return Pattern.compile("^0|(([+]|-)?[1-9][0-9]*)$").matcher(token).matches();
+//        return Pattern.compile("^0|(([+]|-)?[1-9][0-9]*)$").matcher(token).matches();
+        return faForIntegerConstants.isSequenceValid(token);
     }
 
     public void scan() throws IOException {

@@ -74,7 +74,7 @@ public class FA {
         return null;
     }
 
-    public String checkValidSequenceRecursive(String currentState, String sequence) {
+    public String getMovesForSequenceRecursive(String currentState, String sequence) {
         if (sequence.isEmpty()) {
             if (finalStates.contains(currentState))
                 return "(%s, ε)".formatted(currentState);
@@ -87,7 +87,7 @@ public class FA {
         if (nextState == null)
             return null;
         if (nextState instanceof String nextStateString) {
-            String goNextSequence = checkValidSequenceRecursive(nextStateString, sequence.substring(1));
+            String goNextSequence = getMovesForSequenceRecursive(nextStateString, sequence.substring(1));
             if (goNextSequence != null) {
                 return "(%s, %s)|-".formatted(currentState, sequence) + goNextSequence;
             }
@@ -95,7 +95,7 @@ public class FA {
         }
         List<String> nextStatesList = (List<String>) nextState;
         for (var state : nextStatesList) {
-            String goNextSequence = checkValidSequenceRecursive(state, sequence.substring(1));
+            String goNextSequence = getMovesForSequenceRecursive(state, sequence.substring(1));
             if (goNextSequence != null) {
                 return "(%s, %s)|-".formatted(currentState, sequence) + goNextSequence;
             }
@@ -103,11 +103,15 @@ public class FA {
         return null;
     }
 
-    public String checkValidSequence(String sequence) {
-        String checkValidSequenceResult = checkValidSequenceRecursive(initialState, sequence);
+    public String getMovesForSequence(String sequence) {
+        String checkValidSequenceResult = getMovesForSequenceRecursive(initialState, sequence);
         if(checkValidSequenceResult == null)
             return "Sequence is not valid";
         return checkValidSequenceResult;
+    }
+
+    public boolean isSequenceValid(String sequence){
+        return getMovesForSequenceRecursive(initialState, sequence) != null;
     }
 
     public String statesToString() {
