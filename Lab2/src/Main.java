@@ -21,7 +21,7 @@ public class Main {
 
     static {
         try {
-            fa = new FA("src/specifications/FA.in");
+            fa = new FA("src/specifications/FA_integer_constant.in");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -80,6 +80,7 @@ public class Main {
                 System.out.print("Input sequence: ");
                 String sequence = inputScanner.next();
                 System.out.println(fa.checkValidSequence(sequence));
+                break;
             case "quit":
                 exit(0);
                 break;

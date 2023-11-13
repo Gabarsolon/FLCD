@@ -8,7 +8,7 @@ import java.util.*;
 public class FA {
     Set<String> states;
     Set<String> alphabet;
-    Map<Pair<String, Character>, Object> transitions;
+    Map<Pair<String, String>, Object> transitions;
     String initialState;
     Set<String> finalStates;
     boolean isDFA = true;
@@ -27,7 +27,7 @@ public class FA {
         while (!transition.equals("transition_set_stop")) {
             String[] transitionElements = transition.split(",");
             String currentState = transitionElements[0];
-            Character alphabetElement = transitionElements[1].charAt(0);
+            String alphabetElement = transitionElements[1];
             String nextState = transitionElements[2];
 
             transitions.compute(new Pair<>(currentState, alphabetElement), (key, previousNextStates) -> {
@@ -54,25 +54,60 @@ public class FA {
         bufferedReader.close();
     }
 
-    public String checkValidSequence(String sequence) {
-        if (!isDFA)
-            return "The FA is not deterministic (DFA)";
-        var stringBuilder = new StringBuilder();
-        String currentState = initialState;
-        int sequenceIndex = 0;
-        for (var currentTerminal : sequence.toCharArray()) {
-            stringBuilder.append("(%s, %s)|-".formatted(currentState, sequence.substring(sequenceIndex)));
-            String nextState = (String) transitions.get(new Pair<>(currentState, currentTerminal));
-            if (nextState == null)
-                return "Sequence is not valid";
-            currentState = nextState;
-            sequenceIndex++;
+    public Object getNextState(String currentState, String currentTerminal) {
+        for (var transition : transitions.entrySet()) {
+            String state = transition.getKey().getValue0();
+            String terminal = transition.getKey().getValue1();
+            Object nextState = transition.getValue();
+
+            if (state.equals(currentState)) {
+                if (terminal.equals(currentTerminal)) {
+                    return nextState;
+                } else if (terminal.length() > 1) {
+                    char rangeStartCharacter = terminal.charAt(0);
+                    char rangeEndCharacter = terminal.charAt(2);
+                    if (currentTerminal.charAt(0) >= rangeStartCharacter && currentTerminal.charAt(0) <= rangeEndCharacter)
+                        return nextState;
+                }
+            }
         }
-        if (finalStates.contains(currentState))
-            stringBuilder.append("(%s, ε)".formatted(currentState));
-        else
+        return null;
+    }
+
+    public String checkValidSequenceRecursive(String currentState, String sequence) {
+        if (sequence.isEmpty()) {
+            if (finalStates.contains(currentState))
+                return "(%s, ε)".formatted(currentState);
+            else
+                return null;
+        }
+
+        char currentTerminal = sequence.charAt(0);
+        Object nextState = getNextState(currentState, String.valueOf(currentTerminal));
+        if (nextState == null)
+            return null;
+        if (nextState instanceof String nextStateString) {
+            String goNextSequence = checkValidSequenceRecursive(nextStateString, sequence.substring(1));
+            if (goNextSequence != null) {
+                return "(%s, %s)|-".formatted(currentState, sequence) + goNextSequence;
+            }
+            return null;
+        }
+        List<String> nextStatesList = (List<String>) nextState;
+        for (var state : nextStatesList) {
+            String goNextSequence = checkValidSequenceRecursive(state, sequence.substring(1));
+            if (goNextSequence != null) {
+                return "(%s, %s)|-".formatted(currentState, sequence) + goNextSequence;
+            }
+        }
+        return null;
+    }
+
+    public String checkValidSequence(String sequence) {
+        String checkValidSequenceResult = checkValidSequenceRecursive(initialState, sequence);
+        if(checkValidSequenceResult == null)
             return "Sequence is not valid";
-        return stringBuilder.toString();
+        return checkValidSequenceResult;
     }
 
     public String statesToString() {
@@ -93,7 +128,7 @@ public class FA {
         var stringBuilder = new StringBuilder();
         transitions.forEach((state_alphabet_pair, nextState) -> {
             String currentState = state_alphabet_pair.getValue0();
-            Character alphabetElement = state_alphabet_pair.getValue1();
+            String alphabetElement = state_alphabet_pair.getValue1();
             stringBuilder.append("δ(%s,%s) = %s\n".formatted(currentState, alphabetElement, nextState));
         });
 
