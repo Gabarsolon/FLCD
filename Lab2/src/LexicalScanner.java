@@ -109,7 +109,7 @@ public class LexicalScanner {
                 pos = matcher.end();
             }
             if(pos != programLine.length())
-                tokens.add(programLine.substring(pos, programLine.length()));
+                tokens.add(programLine.substring(pos));
             Iterator<String> tokenizer = tokens.stream().iterator();
 
             while (tokenizer.hasNext()) {

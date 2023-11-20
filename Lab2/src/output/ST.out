@@ -9,5 +9,5 @@ Collision Resolution: Chaining
 a                      0
 b                      1
 c                      2
-minimum_between_a_b    3
-minimum_between_b_a    4
+minmimum_between_a_b   3
+minmimum_between_b_a   4

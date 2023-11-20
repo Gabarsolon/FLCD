@@ -11,7 +11,7 @@ public class Main {
 
     static {
         try {
-            scanner = new LexicalScanner("src/programs/p1.txt");
+            scanner = new LexicalScanner("src/programs/p1err.txt");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -21,7 +21,7 @@ public class Main {
 
     static {
         try {
-            fa = new FA("src/specifications/FA_integer_constant.in");
+            fa = new FA("src/specifications/FA.in");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -83,7 +83,6 @@ public class Main {
             case "check_seq" -> {
                 System.out.print("Input sequence: ");
                 String sequence = inputScanner.next();
-                System.out.println(fa.isDFA());
                 System.out.println(fa.getMovesForSequence(sequence));
             }
             case "quit" -> exit(0);

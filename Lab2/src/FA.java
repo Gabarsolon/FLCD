@@ -110,7 +110,7 @@ public class FA {
         if (sequenceIndex == sequence.length() && finalStates.contains(currentState))
             stringBuilder.append("(%s, ε)".formatted(currentState));
         else
-            return "Sequence is not valid";
+            return null;
         return stringBuilder.toString();
     }
 
@@ -126,7 +126,12 @@ public class FA {
     }
 
     public boolean isSequenceValid(String sequence) {
-        return getMovesForSequenceRecursive(initialState, sequence) != null;
+        String checkValidSequenceResult;
+        if(isDFA)
+            checkValidSequenceResult = getMovesForSequenceDFA(sequence);
+        else
+            checkValidSequenceResult = getMovesForSequenceRecursive(initialState, sequence);
+        return checkValidSequenceResult != null;
     }
 
     public boolean isDFA(){
