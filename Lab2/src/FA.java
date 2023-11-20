@@ -6,12 +6,12 @@ import java.io.IOException;
 import java.util.*;
 
 public class FA {
-    Set<String> states;
-    Set<String> alphabet;
-    Map<Pair<String, String>, List<String>> transitions;
-    String initialState;
-    Set<String> finalStates;
-    boolean isDFA = true;
+    private Set<String> states;
+    private Set<String> alphabet;
+    private Map<Pair<String, String>, List<String>> transitions;
+    private String initialState;
+    private Set<String> finalStates;
+    private boolean isDFA = true;
 
     public FA(String faFilePath) throws IOException {
         var bufferedReader = new BufferedReader(new FileReader(faFilePath));
@@ -51,7 +51,7 @@ public class FA {
         bufferedReader.close();
     }
 
-    public List<String> getNextState(String currentState, String currentAlphabetElement) {
+    private List<String> getNextState(String currentState, String currentAlphabetElement) {
         for (var transition : transitions.entrySet()) {
             String state = transition.getKey().getValue0();
             String alphabetElement = transition.getKey().getValue1();
@@ -71,7 +71,7 @@ public class FA {
         return null;
     }
 
-    public String getMovesForSequenceRecursive(String currentState, String sequence) {
+    private String getMovesForSequenceRecursive(String currentState, String sequence) {
         if (sequence.isEmpty()) {
             if (finalStates.contains(currentState))
                 return "(%s, ε)".formatted(currentState);

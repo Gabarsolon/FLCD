@@ -57,14 +57,34 @@ class LexicalScanner{
  -addStringConstant(tokenizer: StringTokenizer): void
  -isIntegerConstant(token: String): boolean
  -outputToFIles(): void
-
-
- 
+}
+class FA{
+  -states: Set<String>
+  -alphabet: Set<String>
+  -transitions: Map<Pair<String, String>, List<String>>
+  -initialState: String
+  -finalStates: String
+  -isDFA: boolean
+  
+  +FA(faFilePath: String): FA
+  
+  -getNextState(currentState: String, currentAlphabetElement: String): List<String>
+  -getMovesForSequenceRecursive(currentState: String, sequence: String): String
+  
+  +getMovesForSequence(sequence: String): String
+  +isSequenceValid(sequence: String): boolean
+  +statesToString(): String
+  +alphabetToString(): String
+  +transitionsToString(): String
+  +initialStateToString(): String
+  +finalStatesToString(): String
+  
 }
 
 HashNode o-- SymbolTable
 Prime o-- SymbolTable
 PIF o-- LexicalScanner
 SymbolTable o-- LexicalScanner
+FA o-- LexicalScanner
 
 @enduml
