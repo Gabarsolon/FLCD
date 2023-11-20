@@ -92,8 +92,34 @@ public class FA {
         return null;
     }
 
+    public String getMovesForSequenceDFA(String sequence) {
+        if (!isDFA)
+            return "The FA is not deterministic (DFA)";
+        var stringBuilder = new StringBuilder();
+        String currentState = initialState;
+        int sequenceIndex = 0;
+        for (Character currentSequenceCharacter : sequence.toCharArray()) {
+            stringBuilder.append("(%s, %s)|-".formatted(currentState, sequence.substring(sequenceIndex)));
+//            List<String> nextStates = transitions.get(new Pair<>(currentState, currentSequenceCharacter.toString()));
+            List<String> nextStates = getNextState(currentState, currentSequenceCharacter.toString());
+            if (nextStates == null)
+                break;
+            currentState = nextStates.get(0);
+            sequenceIndex++;
+        }
+        if (sequenceIndex == sequence.length() && finalStates.contains(currentState))
+            stringBuilder.append("(%s, ε)".formatted(currentState));
+        else
+            return "Sequence is not valid";
+        return stringBuilder.toString();
+    }
+
     public String getMovesForSequence(String sequence) {
-        String checkValidSequenceResult = getMovesForSequenceRecursive(initialState, sequence);
+        String checkValidSequenceResult;
+        if(isDFA)
+            checkValidSequenceResult = getMovesForSequenceDFA(sequence);
+        else
+            checkValidSequenceResult = getMovesForSequenceRecursive(initialState, sequence);
         if (checkValidSequenceResult == null)
             return "Sequence is not valid";
         return checkValidSequenceResult;
@@ -101,6 +127,10 @@ public class FA {
 
     public boolean isSequenceValid(String sequence) {
         return getMovesForSequenceRecursive(initialState, sequence) != null;
+    }
+
+    public boolean isDFA(){
+        return isDFA;
     }
 
     public String statesToString() {

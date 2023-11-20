@@ -21,7 +21,7 @@ public class Main {
 
     static {
         try {
-            fa = new FA("src/specifications/FA.in");
+            fa = new FA("src/specifications/FA_integer_constant.in");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -83,6 +83,7 @@ public class Main {
             case "check_seq" -> {
                 System.out.print("Input sequence: ");
                 String sequence = inputScanner.next();
+                System.out.println(fa.isDFA());
                 System.out.println(fa.getMovesForSequence(sequence));
             }
             case "quit" -> exit(0);
@@ -116,6 +117,7 @@ public class Main {
                 handleSelectedMenuOption(menuOptionsMap.get(selectedOption));
             }catch (Exception exception){
                 System.out.println("Invalid option");
+                System.out.println(exception);
                 System.out.println("-------------------------------------------");
             }
         }

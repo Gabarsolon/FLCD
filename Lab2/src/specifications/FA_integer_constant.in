@@ -3,13 +3,9 @@ p,q,r,s
 p,0,s
 p,+,q
 p,-,q
-p,1-9,q
 p,1-9,r
-p,1-9,s
 q,1-9,r
-q,1-9,s
 r,0-9,r
-r,0-9,s
 transition_set_stop
 p
-s
+q,r,s
