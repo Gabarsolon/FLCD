@@ -8,7 +8,7 @@ import java.util.*;
 public class FA {
     Set<String> states;
     Set<String> alphabet;
-    Map<Pair<String, String>, Object> transitions;
+    Map<Pair<String, String>, List<String>> transitions;
     String initialState;
     Set<String> finalStates;
     boolean isDFA = true;
@@ -16,14 +16,14 @@ public class FA {
     public FA(String faFilePath) throws IOException {
         var bufferedReader = new BufferedReader(new FileReader(faFilePath));
 
-        String statesLine = bufferedReader.readLine().replace("\n", "");
+        String statesLine = bufferedReader.readLine().strip();
         states = Set.of(statesLine.split(","));
 
-        String alphabetLine = bufferedReader.readLine().replace("\n", "");
+        String alphabetLine = bufferedReader.readLine().strip();
         alphabet = Set.of(alphabetLine.split(","));
 
         transitions = new HashMap<>();
-        String transition = bufferedReader.readLine().replace("\n", "");
+        String transition = bufferedReader.readLine().strip();
         while (!transition.equals("transition_set_stop")) {
             String[] transitionElements = transition.split(",");
             String currentState = transitionElements[0];
@@ -31,42 +31,39 @@ public class FA {
             String nextState = transitionElements[2];
 
             transitions.compute(new Pair<>(currentState, alphabetElement), (key, previousNextStates) -> {
-                        if (previousNextStates == null)
-                            return nextState;
-                        else if (previousNextStates instanceof String) {
-                            isDFA = false;
-                            return new ArrayList<>(Arrays.asList(previousNextStates, nextState));
+                        if (previousNextStates == null) {
+                            return new ArrayList<>(Arrays.asList(nextState));
                         }
-                        List<String> states = (List<String>) previousNextStates;
-                        states.add(nextState);
-                        return states;
+                        isDFA = false;
+                        previousNextStates.add(nextState);
+                        return previousNextStates;
                     }
             );
 
-            transition = bufferedReader.readLine().replace("\n", "");
+            transition = bufferedReader.readLine().strip();
         }
 
-        initialState = bufferedReader.readLine().replace("\n", "");
+        initialState = bufferedReader.readLine().strip();
 
-        String finalStatesLine = bufferedReader.readLine().replace("\n", "");
+        String finalStatesLine = bufferedReader.readLine().strip();
         finalStates = Set.of(finalStatesLine.split(","));
 
         bufferedReader.close();
     }
 
-    public Object getNextState(String currentState, String currentTerminal) {
+    public List<String> getNextState(String currentState, String currentAlphabetElement) {
         for (var transition : transitions.entrySet()) {
             String state = transition.getKey().getValue0();
-            String terminal = transition.getKey().getValue1();
-            Object nextState = transition.getValue();
+            String alphabetElement = transition.getKey().getValue1();
+            List<String> nextState = transition.getValue();
 
             if (state.equals(currentState)) {
-                if (terminal.equals(currentTerminal)) {
+                if (alphabetElement.equals(currentAlphabetElement)) {
                     return nextState;
-                } else if (terminal.length() > 1) {
-                    char rangeStartCharacter = terminal.charAt(0);
-                    char rangeEndCharacter = terminal.charAt(2);
-                    if (currentTerminal.charAt(0) >= rangeStartCharacter && currentTerminal.charAt(0) <= rangeEndCharacter)
+                } else if (alphabetElement.length() > 1) {
+                    char rangeStartCharacter = alphabetElement.charAt(0);
+                    char rangeEndCharacter = alphabetElement.charAt(2);
+                    if (currentAlphabetElement.charAt(0) >= rangeStartCharacter && currentAlphabetElement.charAt(0) <= rangeEndCharacter)
                         return nextState;
                 }
             }
@@ -82,18 +79,10 @@ public class FA {
                 return null;
         }
 
-        char currentTerminal = sequence.charAt(0);
-        Object nextState = getNextState(currentState, String.valueOf(currentTerminal));
-        if (nextState == null)
+        char currentAlphabetElement = sequence.charAt(0);
+        List<String> potentialNextStateList = getNextState(currentState, String.valueOf(currentAlphabetElement));
+        if (potentialNextStateList == null)
             return null;
-        if (nextState instanceof String nextStateString) {
-            String goNextSequence = getMovesForSequenceRecursive(nextStateString, sequence.substring(1));
-            if (goNextSequence != null) {
-                return "(%s, %s)|-".formatted(currentState, sequence) + goNextSequence;
-            }
-            return null;
-        }
-        List<String> potentialNextStateList = (List<String>) nextState;
         for (var potentialNextState : potentialNextStateList) {
             String goNextSequence = getMovesForSequenceRecursive(potentialNextState, sequence.substring(1));
             if (goNextSequence != null) {
@@ -105,27 +94,23 @@ public class FA {
 
     public String getMovesForSequence(String sequence) {
         String checkValidSequenceResult = getMovesForSequenceRecursive(initialState, sequence);
-        if(checkValidSequenceResult == null)
+        if (checkValidSequenceResult == null)
             return "Sequence is not valid";
         return checkValidSequenceResult;
     }
 
-    public boolean isSequenceValid(String sequence){
+    public boolean isSequenceValid(String sequence) {
         return getMovesForSequenceRecursive(initialState, sequence) != null;
     }
 
     public String statesToString() {
-        var stringBuilder = new StringBuilder();
-        stringBuilder.append("Q = ");
-        stringBuilder.append(states.toString().replace("[", "{").replace("]", "}"));
-        return stringBuilder.toString();
+        return "Q = " +
+                states.toString().replace("[", "{").replace("]", "}");
     }
 
     public String alphabetToString() {
-        var stringBuilder = new StringBuilder();
-        stringBuilder.append("Σ = ");
-        stringBuilder.append(alphabet.toString().replace("[", "{").replace("]", "}"));
-        return stringBuilder.toString();
+        return "Σ = " +
+                alphabet.toString().replace("[", "{").replace("]", "}");
     }
 
     public String transitionsToString() {
@@ -133,7 +118,7 @@ public class FA {
         transitions.forEach((state_alphabet_pair, nextState) -> {
             String currentState = state_alphabet_pair.getValue0();
             String alphabetElement = state_alphabet_pair.getValue1();
-            stringBuilder.append("δ(%s,%s) = %s\n".formatted(currentState, alphabetElement, nextState));
+            stringBuilder.append("δ(%s,%s) = %s\n".formatted(currentState, alphabetElement, nextState.toString().replace("[", "").replace("]", "")));
         });
 
         //delete the last new line
@@ -147,10 +132,8 @@ public class FA {
     }
 
     public String finalStatesToString() {
-        var stringBuilder = new StringBuilder();
-        stringBuilder.append("F = ");
-        stringBuilder.append(finalStates.toString().replace("[", "{").replace("]", "}"));
-        return stringBuilder.toString();
+        return "F = " +
+                finalStates.toString().replace("[", "{").replace("]", "}");
     }
 
     @Override

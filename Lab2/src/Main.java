@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Scanner;
 
 import static java.lang.System.exit;
@@ -63,28 +64,29 @@ public class Main {
         System.out.println("-------------------------------------------");
 
         switch (option) {
-            case "scan":
-                scanner.scan();
-                break;
-            case "display_fa":
+            case "scan" -> scanner.scan();
+            case "display_fa" -> {
                 while (true) {
-                    printFAMenu();
-                    String faMenuOption = faMenuOptionsMap.get(inputScanner.nextInt());
-                    if (faMenuOption == "go_back")
-                        break;
-                    handleDisplayFAMenu(faMenuOption);
+                    try{
+                        printFAMenu();
+                        String faMenuOption = faMenuOptionsMap.get(inputScanner.nextInt());
+                        if (faMenuOption == "go_back")
+                            break;
+                        handleDisplayFAMenu(faMenuOption);
+                    }
+                    catch (Exception exception){
+                        System.out.println("Invalid option");
+                        System.out.println("-------------------------------------------");
+                    }
                 }
-                break;
-            case "check_seq":
+            }
+            case "check_seq" -> {
                 System.out.print("Input sequence: ");
                 String sequence = inputScanner.next();
                 System.out.println(fa.getMovesForSequence(sequence));
-                break;
-            case "quit":
-                exit(0);
-                break;
-            default:
-                System.out.println("Invalid option");
+            }
+            case "quit" -> exit(0);
+            default -> System.out.println("Invalid option");
         }
         System.out.println("-------------------------------------------");
     }
@@ -93,23 +95,12 @@ public class Main {
         System.out.println("-------------------------------------------");
 
         switch (option) {
-            case "states":
-                System.out.println(fa.statesToString());
-                break;
-            case "alphabet":
-                System.out.println(fa.alphabetToString());
-                break;
-            case "transitions":
-                System.out.println(fa.transitionsToString());
-                break;
-            case "initial_state":
-                System.out.println(fa.initialStateToString());
-                break;
-            case "final_states":
-                System.out.println(fa.finalStatesToString());
-                break;
-            default:
-                System.out.println("Invalid option");
+            case "states" -> System.out.println(fa.statesToString());
+            case "alphabet" -> System.out.println(fa.alphabetToString());
+            case "transitions" -> System.out.println(fa.transitionsToString());
+            case "initial_state" -> System.out.println(fa.initialStateToString());
+            case "final_states" -> System.out.println(fa.finalStatesToString());
+            default -> System.out.println("Invalid option");
         }
         System.out.println("-------------------------------------------");
 
@@ -119,9 +110,14 @@ public class Main {
         int selectedOption;
 
         while (true) {
-            printMenu();
-            selectedOption = inputScanner.nextInt();
-            handleSelectedMenuOption(menuOptionsMap.get(selectedOption));
+            try{
+                printMenu();
+                selectedOption = inputScanner.nextInt();
+                handleSelectedMenuOption(menuOptionsMap.get(selectedOption));
+            }catch (Exception exception){
+                System.out.println("Invalid option");
+                System.out.println("-------------------------------------------");
+            }
         }
     }
 }
