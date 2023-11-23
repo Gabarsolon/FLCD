@@ -8,4 +8,4 @@ q,1-9,r
 r,0-9,r
 transition_set_stop
 p
-q,r,s
+r,s

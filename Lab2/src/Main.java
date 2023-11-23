@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 import static java.lang.System.exit;
-
+//1.c
 public class Main {
     static Scanner inputScanner = new Scanner(System.in);
     static LexicalScanner scanner;
@@ -21,7 +21,7 @@ public class Main {
 
     static {
         try {
-            fa = new FA("src/specifications/FA.in");
+            fa = new FA("src/specifications/FA_integer_constant.in");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
