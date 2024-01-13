@@ -30,8 +30,22 @@ TOKEN_SEPARATOR {SEPARATOR}|{OPERATOR}
 {COMMENT} /* eat up comments */ 
 [ \n\t]+  /* eat up whitespace */ 
 
+
 . {
-    printf("Lexical error on line %d, token \"%s\" is not an reserved word, operator, separator, identifier or constant\n", yylineno, yytext);
+    char invalid_token[256];
+    int index_invalid_token = 0;
+    invalid_token[index_invalid_token++] = yytext[0];
+    char current_character;
+    while(1){
+        current_character = input();
+        if(current_character == EOF || strchr("()[]{};,\n\t[+-*/=<>%!] ", current_character) != NULL){
+            unput(current_character);
+            break;
+        }
+        invalid_token[index_invalid_token++] = current_character;
+    }
+    invalid_token[index_invalid_token] = '\0';
+    printf("Lexical error on line %d, token \"%s\" is not an reserved word, operator, separator, identifier or constant\n", yylineno, invalid_token);
     lexically_correct = 0;
 }
 

@@ -830,18 +830,33 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 33 "lang.lxi"
+#line 34 "lang.lxi"
 {
-    printf("Lexical error on line %d, token \"%s\" is not an reserved word, operator, separator, identifier or constant\n", yylineno, yytext);
+    
+    char invalid_token[256];
+    int index_invalid_token = 0;
+    invalid_token[index_invalid_token++] = yytext[0];
+    char current_character;
+    while(1){
+        current_character = input();
+        if(current_character == EOF || strchr("()[]{};,\n\t[+-*/=<>%!] ", current_character) != NULL){
+            unput(current_character);
+            break;
+        }
+        invalid_token[index_invalid_token++] = current_character;
+    }
+    invalid_token[index_invalid_token] = '\0';
+    printf("Lexical error on line %d, token \"%s\" is not an reserved word, operator, separator, identifier or constant\n", yylineno, invalid_token);
     lexically_correct = 0;
+    
 }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 39 "lang.lxi"
+#line 55 "lang.lxi"
 ECHO;
 	YY_BREAK
-#line 845 "lex.yy.c"
+#line 860 "lex.yy.c"
 			case YY_STATE_EOF(INITIAL):
 				yyterminate();
 
@@ -1725,7 +1740,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 39 "lang.lxi"
+#line 55 "lang.lxi"
 
 
 int main(int argc, char** argv){
