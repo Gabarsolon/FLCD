@@ -1,44 +1,53 @@
 %{
-#include <stdio.h>
+int lexically_correct = 1;
 %}
 
 %option noyywrap
+%option yylineno
 
 DIGIT   [0-9]
-SPECIAL_CHAR    [!@$%&]
-LETTER  [A-Za-z_]
+LETTER  [A-Za-z_ ]
 OPERATOR   [+\-*/=<>%]|"!="|"<=="|"==>"|"==="|"+="|"-="
 SEPARATOR   [\(\)\[\]\{\};, ]
-IDENTIFIER  {LETTER}{DIGIT}*
+IDENTIFIER  {LETTER}({DIGIT}|{LETTER})*
 NON_ZERO_DIGIT  [1-9]
 NATURAL_NUMBER  {NON_ZERO_DIGIT}{DIGIT}*
 INTEGER [+-]?{NATURAL_NUMBER}|0
-CHARACTER   '({LETTER}|{DIGIT}|{SPECIAL_CHAR})'
-STRING  \"({LETTER}|{DIGIT}|{SPECIAL_CHAR})*\"
+CHARACTER   '[^\']*'
+STRING  \"[^\"]*\"
+COMMENT #.*#
+
 
 %%
 
-{DIGIT}    printf("Hey... asta pare a fi o cifra: %s\n", yytext);
-{IDENTIFIER}   printf("Asta ii identificator smr eu de nu: %s\n", yytext);
-{SPECIAL_CHAR}  printf("Special char my man?: %s\n", yytext);
-{OPERATOR}  printf("Operator: %s\n", yytext);
-{SEPARATOR} printf("Separator: %s\n", yytext);
-{INTEGER}   printf("Numar intgred, duh!: %s\n", yytext);
-{CHARACTER} printf("Characterul uman perspicacitant: %s", yytext);
-{STRING}    printf("STRING, omg: %s", yytext);
+{DIGIT}    //printf("Hey... asta pare a fi o cifra: %s\n", yytext);
+{IDENTIFIER}   //printf("Asta ii identificator smr eu de nu: %s\n", yytext);
+{OPERATOR}  //printf("Operator: %s\n", yytext);
+{SEPARATOR} //printf("Separator: %s\n", yytext);
+{INTEGER}   //printf("Numar intgred, duh!: %s\n", yytext);
+{CHARACTER} //printf("Characterul uman perspicacitant: %s", yytext);
+{STRING}    //printf("STRING, omg: %s", yytext);
+{COMMENT}   //printf("Comentezi, huh?!: %s", yytext);
 
 
-.   printf("Mno, asta ce tzezstosul meu ii?: %s\n", yytext);
+.   {
+    printf("Lexical error on line %d, token \"%s\" is not an reserved word, operator, separator, identifier or constant\n", yylineno, yytext);
+    lexically_correct = 0;
+    };
+[ \t\n]+ 		/* eat up whitespace */ 
 
 %%
 
 int main(int argc, char** argv){
+    printf("-------------------------------------\n");
     ++argv, --argc; //skip over program name
     if(argc > 0)
         yyin = fopen(argv[0], "r");
     else
         yyin = stdin;
     yylex();
-    printf("Hey, cf?");
+    if(lexically_correct)
+        printf("Lexically correct\n");
+    printf("----------------------------------------\n");
     return 0;
 }
