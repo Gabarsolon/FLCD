@@ -7,18 +7,26 @@
 DIGIT   [0-9]
 SPECIAL_CHAR    [!@$%&]
 LETTER  [A-Za-z_]
-OPERATOR   [+-*/=<>%]|!=|<==|==>|===|+=|-=
-SEPARATOR   [()[]{};, ]
+OPERATOR   [+\-*/=<>%]|"!="|"<=="|"==>"|"==="|"+="|"-="
+SEPARATOR   [\(\)\[\]\{\};, ]
 IDENTIFIER  {LETTER}{DIGIT}*
 NON_ZERO_DIGIT  [1-9]
 NATURAL_NUMBER  {NON_ZERO_DIGIT}{DIGIT}*
 INTEGER [+-]?{NATURAL_NUMBER}|0
-CHARACTER   '{LETTER}'|'{DIGIT}'|'{SPECIAL_CHAR}'
-STRING  ("{LETTER}|{DIGIT}|{SPECIAL_CHAR}")+
+CHARACTER   '({LETTER}|{DIGIT}|{SPECIAL_CHAR})'
+STRING  \"({LETTER}|{DIGIT}|{SPECIAL_CHAR})*\"
 
 %%
 
-{DIGIT}+    printf("Hey... asta pare a fi o cifra: %s\n", yytext);
+{DIGIT}    printf("Hey... asta pare a fi o cifra: %s\n", yytext);
+{IDENTIFIER}   printf("Asta ii identificator smr eu de nu: %s\n", yytext);
+{SPECIAL_CHAR}  printf("Special char my man?: %s\n", yytext);
+{OPERATOR}  printf("Operator: %s\n", yytext);
+{SEPARATOR} printf("Separator: %s\n", yytext);
+{INTEGER}   printf("Numar intgred, duh!: %s\n", yytext);
+{CHARACTER} printf("Characterul uman perspicacitant: %s", yytext);
+{STRING}    printf("STRING, omg: %s", yytext);
+
 
 .   printf("Mno, asta ce tzezstosul meu ii?: %s\n", yytext);
 
