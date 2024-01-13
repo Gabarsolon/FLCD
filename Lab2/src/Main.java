@@ -11,7 +11,7 @@ public class Main {
 
     static {
         try {
-            scanner = new LexicalScanner("src/programs/p1err.txt");
+            scanner = new LexicalScanner("src/programs/p4.txt");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

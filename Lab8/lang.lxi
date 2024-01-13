@@ -2,15 +2,35 @@
 #include <stdio.h>
 %}
 
+%option noyywrap
 
+DIGIT   [0-9]
+SPECIAL_CHAR    [!@$%&]
+LETTER  [A-Za-z_]
+OPERATOR   [+-*/=<>%]|!=|<==|==>|===|+=|-=
+SEPARATOR   [()[]{};, ]
+IDENTIFIER  {LETTER}{DIGIT}*
+NON_ZERO_DIGIT  [1-9]
+NATURAL_NUMBER  {NON_ZERO_DIGIT}{DIGIT}*
+INTEGER [+-]?{NATURAL_NUMBER}|0
+CHARACTER   '{LETTER}'|'{DIGIT}'|'{SPECIAL_CHAR}'
+STRING  ("{LETTER}|{DIGIT}|{SPECIAL_CHAR}")+
 
 %%
 
+{DIGIT}+    printf("Hey... asta pare a fi o cifra: %s\n", yytext);
+
+.   printf("Mno, asta ce tzezstosul meu ii?: %s\n", yytext);
+
 %%
 
-int main() {
-    printf("Hello, World!\n");
+int main(int argc, char** argv){
+    ++argv, --argc; //skip over program name
+    if(argc > 0)
+        yyin = fopen(argv[0], "r");
+    else
+        yyin = stdin;
+    yylex();
+    printf("Hey, cf?");
     return 0;
 }
-
-int yywrap(){return(1);}

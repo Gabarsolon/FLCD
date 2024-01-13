@@ -18,8 +18,6 @@ public class PIF {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("  Token        Position  \n");
-        stringBuilder.append("-------------------------\n");
         for (var pair : data) {
             stringBuilder.append("%-20s %3d\n".formatted(pair.getValue0(), pair.getValue1()));
         }
