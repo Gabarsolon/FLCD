@@ -8,7 +8,7 @@ int lexically_correct = 1;
 DIGIT   [0-9]
 LETTER  [A-Za-z_]
 OPERATOR   [+\-*/=<>%]|"!="|"<=="|"==>"|"==="|"+="|"-="
-SEPARATOR   [\(\)\[\]\{\};, ]
+SEPARATOR   [\(\)\[\]\{\};,]|" "
 IDENTIFIER  {LETTER}({DIGIT}|{LETTER})*
 NON_ZERO_DIGIT  [1-9]
 NATURAL_NUMBER  {NON_ZERO_DIGIT}{DIGIT}*
@@ -16,26 +16,29 @@ INTEGER [+-]?{NATURAL_NUMBER}|0
 CHARACTER   '[^\']*'
 STRING  \"[^\"]*\"
 COMMENT #.*#
-VALID_TOKEN {OPERATOR}|{IDENTIFIER}|{INTEGER}|{STRING}|{COMMENT}
+VALID_TOKEN {IDENTIFIER}|{INTEGER}|{STRING}|{COMMENT}
+TOKEN_SEPARATOR {SEPARATOR}|{OPERATOR}
 
 
 %%
 int|alpha|arrr|fibre|make|if|fi|of|prgr|read|show|define|now
 persistent|for|while|and|or|not|starts|from|transforms|stops|at|stdin|stdout   //printf("Reserved keyword: %s\n", yytext);
-{IDENTIFIER}   //printf("Asta ii identificator smr eu de nu: %s\n", yytext);
-{OPERATOR}  //printf("Operator: %s\n", yytext);
-{SEPARATOR} //printf("Separator: %s\n", yytext);
-{INTEGER}   //printf("Numar intgred, duh!: %s\n", yytext);
-{CHARACTER} //printf("Characterul uman perspicacitant: %s\n", yytext);
-{STRING}    //printf("STRING, omg: %s\n", yytext);
-{COMMENT}   //printf("Comentezi, huh?!: %s\n", yytext);
+
+^{VALID_TOKEN}{TOKEN_SEPARATOR}   //printf("Numar intgred, duh!: %s\n", yytext);
+{VALID_TOKEN}{TOKEN_SEPARATOR}
+{VALID_TOKEN}$
+^{VALID_TOKEN}$
+{TOKEN_SEPARATOR}
 
 [ \t\n]+ 		/* eat up whitespace */ 
+
 
 .   {
     printf("Lexical error on line %d, token \"%s\" is not an reserved word, operator, separator, identifier or constant\n", yylineno, yytext);
     lexically_correct = 0;
     };
+
+
 
 %%
 
