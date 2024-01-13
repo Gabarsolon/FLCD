@@ -10,7 +10,7 @@ int lexically_correct = 1;
 DIGIT   [0-9]
 LETTER  [A-Za-z_]
 OPERATOR   [+\-*/=<>%]|"!="|"<=="|"==>"|"==="|"+="|"-="
-SEPARATOR   [\(\)\[\]\{\};,\n\t]|" "
+SEPARATOR   [\(\)\[\]\{\};,]
 IDENTIFIER  {LETTER}({DIGIT}|{LETTER})*
 NON_ZERO_DIGIT  [1-9]
 NATURAL_NUMBER  {NON_ZERO_DIGIT}{DIGIT}*
@@ -19,34 +19,22 @@ CHARACTER   '[^\']*'
 STRING  \"[^\"]*\"
 COMMENT #.*#
 RESERVED_WORD   int|alpha|arrr|fibre|make|if|fi|of|prgr|read|show|define|now|persistent|for|while|and|or|not|starts|from|transforms|stops|at|stdin|stdout
-VALID_TOKEN {IDENTIFIER}|{INTEGER}|{STRING}|{COMMENT}|{RESERVED_WORD}
+VALID_TOKEN {IDENTIFIER}|{INTEGER}|{STRING}|{RESERVED_WORD}
 TOKEN_SEPARATOR {SEPARATOR}|{OPERATOR}
 
 
 %%
-^{VALID_TOKEN}{TOKEN_SEPARATOR} 
-{VALID_TOKEN}{TOKEN_SEPARATOR}  
-{VALID_TOKEN}$  
-^{VALID_TOKEN}$ 
-{TOKEN_SEPARATOR}
+{VALID_TOKEN}/({TOKEN_SEPARATOR}|[\n\t ]) printf("%s\n", yytext);
+{TOKEN_SEPARATOR} printf("%s\n", yytext);
+
+{COMMENT} /* eat up comments */ 
+[ \n\t]+  /* eat up whitespace */ 
 
 . {
-    char invalid_token[256];
-    int index_invalid_token = 0;
-    invalid_token[index_invalid_token++] = yytext[0];
-    char current_character;
-    while(1){
-        current_character = input();
-        if(current_character == EOF || strchr("()[]{};,\n\t[+-*/=<>%] ", current_character) != NULL){
-            unput(current_character);
-            break;
-        }
-        invalid_token[index_invalid_token++] = current_character;
-    }
-    invalid_token[index_invalid_token] = '\0';
-    printf("Lexical error on line %d, token \"%s\" is not an reserved word, operator, separator, identifier or constant\n", yylineno, invalid_token);
+    printf("Lexical error on line %d, token \"%s\" is not an reserved word, operator, separator, identifier or constant\n", yylineno, yytext);
     lexically_correct = 0;
-    };
+}
+
 
 %%
 
