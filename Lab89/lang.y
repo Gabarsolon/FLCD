@@ -25,9 +25,6 @@ void yyerror(const char *s);
 %token PERSISTENT
 %token FOR
 %token WHILE
-%token AND
-%token OR
-%token NOT
 %token STARTS
 %token FROM
 %token TRANSFORMS
@@ -47,6 +44,12 @@ void yyerror(const char *s);
 %token EQ
 %token INCREMENT
 %token DECREMENT
+
+%left '+' '-'
+%left '/' '%' '*'
+%left OR
+%left AND
+%left NOT
 
 %%
 
@@ -90,7 +93,6 @@ expression:  expression '+' term
 term:   term '*' factor
     |   term '/' factor
     |   term '%' factor
-    |   term NOT factor
     |   factor
     ;
 factor: '(' expression ')'
@@ -125,8 +127,9 @@ whilestmt:  WHILE condition '{' stmtlist '}'
     ;
 forstmt:    FOR IDENTIFIER STARTS FROM variable_or_constant TRANSFORMS INTO assignstmt STOPS AT condition '{' stmt '}'
     ;
-condition:  expression relation expression
-    ;
+condition:  expression relation condition
+        |   expression relation expression
+        ;
 relation:   '<'
         |   '>'
         |   EQ
