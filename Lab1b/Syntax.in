@@ -30,7 +30,7 @@
 
 <operator> := +|-|*|/
 
-<term> ::= <identifier>|<arrayaccess>|<constant>R
+<term> ::= <identifier>|<arrayaccess>|<constant>
 
 <iostmt> ::= <readstmt>|<show>
 

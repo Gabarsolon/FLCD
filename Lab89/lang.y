@@ -7,12 +7,76 @@ int yylex();
 void yyerror(char *s);
 %}
 
-%token BISON
+%token INT
+%token ALPHA
+%token ARRR
+%token FIBRE
+%token MAKE
+%token IF
+%token FI
+%token OF
+%token PRGR
+%token READ
+%token SHOW
+%token DEFINE
+%token NOW
+%token PERSISTENT
+%token FOR
+%token WHILE
+%token AND
+%token OR
+%token NOT
+%token STARTS
+%token FROM
+%token TRANSFORMS
+%token STOPS
+%token AT
+%token STDIN
+%token STDOUT
+
+%token IDENTIFIER
+%token INTEGER
+%token STRING
+%token CHARACTER
+
+%token LE
+%token GE
+%token EQ
+%token INCREMENT
+%token DECREMENT
 
 %%
 
-start:  BISON   {printf("Found a bison!\n");}
+program:    stmt ';'
+        |   stmt ';' program
         ;
+stmt:   declaration
+    |   simplstmt
+    |   structstmt
+    ;
+declaration:    DEFINE type IDENTIFIER
+            |   declaration_and_assignment
+            |   array_declaration
+            ;
+type:   ALPHA
+    |   FIBRE
+    |   INT
+    ;
+declaration_and_assignment: DEFINE type IDENTIFIER = constant
+    ;
+constant:   INTEGER
+        |   CHARACTER
+        |   STRING
+        ;
+array_declaration:  ARRR OF integer_constant_or_identifier IDENTIFIER
+    ;
+integer_constant_or_identifier: INTEGER
+                            |   IDENTIFIER
+                            ;
+simplstmt:  assignstmt
+        |   iostmt
+        ;
+
 
 %%
 

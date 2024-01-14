@@ -39,7 +39,41 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     BISON = 258
+     INT = 258,
+     ALPHA = 259,
+     ARRR = 260,
+     FIBRE = 261,
+     MAKE = 262,
+     IF = 263,
+     FI = 264,
+     OF = 265,
+     PRGR = 266,
+     READ = 267,
+     SHOW = 268,
+     DEFINE = 269,
+     NOW = 270,
+     PERSISTENT = 271,
+     FOR = 272,
+     WHILE = 273,
+     AND = 274,
+     OR = 275,
+     NOT = 276,
+     STARTS = 277,
+     FROM = 278,
+     TRANSFORMS = 279,
+     STOPS = 280,
+     AT = 281,
+     STDIN = 282,
+     STDOUT = 283,
+     IDENTIFIER = 284,
+     INTEGER = 285,
+     STRING = 286,
+     CHARACTER = 287,
+     LE = 288,
+     GE = 289,
+     EQ = 290,
+     INCREMENT = 291,
+     DECREMENT = 292
    };
 #endif
 

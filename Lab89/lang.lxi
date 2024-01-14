@@ -12,7 +12,7 @@ int lexically_correct = 1;
 
 DIGIT   [0-9]
 LETTER  [A-Za-z_]
-OPERATOR   [+\-*/=<>%]|"!="|"<=="|"==>"|"==="|"+="|"-="
+OPERATOR   [+\-*/=<>%]
 SEPARATOR   [\(\)\[\]\{\};,]
 IDENTIFIER  {LETTER}({DIGIT}|{LETTER})*
 NON_ZERO_DIGIT  [1-9]
@@ -22,13 +22,51 @@ CHARACTER   '[^\']*'
 STRING  \"[^\"]*\"
 COMMENT #.*#
 RESERVED_WORD   int|alpha|arrr|fibre|make|if|fi|of|prgr|read|show|define|now|persistent|for|while|and|or|not|starts|from|transforms|stops|at|stdin|stdout
-VALID_TOKEN {IDENTIFIER}|{INTEGER}|{STRING}|{RESERVED_WORD}
+VALID_TOKEN {IDENTIFIER}|{INTEGER}|{STRING}|{CHARACTER}|{RESERVED_WORD}
 TOKEN_SEPARATOR {SEPARATOR}|{OPERATOR}
 WHITE_SPACE [ \n\t]
+SEPARATOR_OR_WHITE_SPACE    {TOKEN_SEPARATOR}|{WHITE_SPACE}
 
 %%
-{VALID_TOKEN}/({TOKEN_SEPARATOR}|{WHITE_SPACE}) {return BISON;}
-{TOKEN_SEPARATOR} //printf("%s\n", yytext);
+int/({SEPARATOR_OR_WHITE_SPACE})          { return INT; }
+alpha/({SEPARATOR_OR_WHITE_SPACE})        { return ALPHA; }
+arrr/({SEPARATOR_OR_WHITE_SPACE})         { return ARRR; }
+fibre/({SEPARATOR_OR_WHITE_SPACE})        { return FIBRE; }
+make/({SEPARATOR_OR_WHITE_SPACE})         { return MAKE; }
+if/({SEPARATOR_OR_WHITE_SPACE})           { return IF; }
+fi/({SEPARATOR_OR_WHITE_SPACE})           { return FI; }
+of/({SEPARATOR_OR_WHITE_SPACE})           { return OF; }
+prgr/({SEPARATOR_OR_WHITE_SPACE})         { return PRGR; }
+read/({SEPARATOR_OR_WHITE_SPACE})         { return READ; }
+show/({SEPARATOR_OR_WHITE_SPACE})         { return SHOW; }
+define/({SEPARATOR_OR_WHITE_SPACE})       { return DEFINE; }
+now/({SEPARATOR_OR_WHITE_SPACE})          { return NOW; }
+persistent/({SEPARATOR_OR_WHITE_SPACE})   { return PERSISTENT; }
+for/({SEPARATOR_OR_WHITE_SPACE})          { return FOR; }
+while/({SEPARATOR_OR_WHITE_SPACE})        { return WHILE; }
+and/({SEPARATOR_OR_WHITE_SPACE})          { return AND; }
+or/({SEPARATOR_OR_WHITE_SPACE})           { return OR; }
+not/({SEPARATOR_OR_WHITE_SPACE})          { return NOT; }
+starts/({SEPARATOR_OR_WHITE_SPACE})       { return STARTS; }
+from/({SEPARATOR_OR_WHITE_SPACE})         { return FROM; }
+transforms/({SEPARATOR_OR_WHITE_SPACE})   { return TRANSFORMS; }
+stops/({SEPARATOR_OR_WHITE_SPACE})        { return STOPS; }
+at/({SEPARATOR_OR_WHITE_SPACE})           { return AT; }
+stdin/({SEPARATOR_OR_WHITE_SPACE})        { return STDIN; }
+stdout/({SEPARATOR_OR_WHITE_SPACE})       { return STDOUT; }
+
+{IDENTIFIER}/({SEPARATOR_OR_WHITE_SPACE})   {return IDENTIFIER;}
+{INTEGER}/({SEPARATOR_OR_WHITE_SPACE})      {return INTEGER;}
+{STRING}/({SEPARATOR_OR_WHITE_SPACE})       {return STRING;}
+{CHARACTER}/({SEPARATOR_OR_WHITE_SPACE})    {return CHARACTER;}
+
+{TOKEN_SEPARATOR}   {return yytext[0]; }
+
+"<=="   {return LE;}
+"==>"   {return GE;}
+"==="   {return EQ;}
+"+="    {return INCREMENT;}
+"-="    {return DECREMENT;}
 
 {COMMENT} /* eat up comments */ 
 {WHITE_SPACE}+  /* eat up whitespace */ 
