@@ -1,4 +1,4 @@
-#difference of n numbers#*
+#difference of n numbers#
 
 define int n;
 define int sum;

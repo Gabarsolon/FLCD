@@ -28,6 +28,12 @@
 
 <expression> ::= <term><operator><expression><term>| <term>
 
+expression ::= expression "+" term | term
+
+term ::= term "*" factor | factor
+
+factor ::= "(" expression ")" | IDENTIFIER
+
 <operator> := +|-|*|/
 
 <term> ::= <identifier>|<arrayaccess>|<constant>

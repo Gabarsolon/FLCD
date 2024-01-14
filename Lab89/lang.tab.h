@@ -61,19 +61,20 @@
      STARTS = 277,
      FROM = 278,
      TRANSFORMS = 279,
-     STOPS = 280,
-     AT = 281,
-     STDIN = 282,
-     STDOUT = 283,
-     IDENTIFIER = 284,
-     INTEGER = 285,
-     STRING = 286,
-     CHARACTER = 287,
-     LE = 288,
-     GE = 289,
-     EQ = 290,
-     INCREMENT = 291,
-     DECREMENT = 292
+     INTO = 280,
+     STOPS = 281,
+     AT = 282,
+     STDIN = 283,
+     STDOUT = 284,
+     IDENTIFIER = 285,
+     INTEGER = 286,
+     STRING = 287,
+     CHARACTER = 288,
+     LE = 289,
+     GE = 290,
+     EQ = 291,
+     INCREMENT = 292,
+     DECREMENT = 293
    };
 #endif
 
