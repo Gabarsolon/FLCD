@@ -10,8 +10,8 @@ read(c, stdin);
 
 define int minmimum_between_a_b;
 
-#lexical error: "$daca" isn't a keyword, operator, separator, constant or identifier#
-0daca a < b {
+#lexical error: "0da$ca" isn't a keyword, operator, separator, constant or identifier#
+0da$ca a < b {
     minmimum_between_a_b = a;
 }
 fi {

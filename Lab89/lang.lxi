@@ -1,5 +1,6 @@
 %{
 #include <string.h>
+#include "lang.tab.h"
 
 int lexically_correct = 1;
 %}
@@ -23,13 +24,14 @@ COMMENT #.*#
 RESERVED_WORD   int|alpha|arrr|fibre|make|if|fi|of|prgr|read|show|define|now|persistent|for|while|and|or|not|starts|from|transforms|stops|at|stdin|stdout
 VALID_TOKEN {IDENTIFIER}|{INTEGER}|{STRING}|{RESERVED_WORD}
 TOKEN_SEPARATOR {SEPARATOR}|{OPERATOR}
+WHITE_SPACE [ \n\t]
 
 %%
-{VALID_TOKEN}/({TOKEN_SEPARATOR}|[\n\t ]) //printf("%s\n", yytext);
+{VALID_TOKEN}/({TOKEN_SEPARATOR}|{WHITE_SPACE}) {return BISON;}
 {TOKEN_SEPARATOR} //printf("%s\n", yytext);
 
 {COMMENT} /* eat up comments */ 
-[ \n\t]+  /* eat up whitespace */ 
+{WHITE_SPACE}+  /* eat up whitespace */ 
 
 
 . {
@@ -37,25 +39,8 @@ TOKEN_SEPARATOR {SEPARATOR}|{OPERATOR}
     yymore();
 }
 
-<LEXICAL_ERROR>([^+\-*/=<>%!\(\)\[\]\{\};,\n\t ])*/({TOKEN_SEPARATOR}|[\n\t ]) {
+<LEXICAL_ERROR>([^+\-*/=<>%!\(\)\[\]\{\};,\n\t ])*/({TOKEN_SEPARATOR}|{WHITE_SPACE}) {
     printf("Lexical error on line %d, token \"%s\" is not an reserved word, operator, separator, identifier or constant\n", yylineno, yytext);
     lexically_correct = 0;
     BEGIN(INITIAL);
-}
-
-
-%%
-
-int main(int argc, char** argv){
-    printf("----------------------------------------\n");
-    ++argv, --argc; //skip over program name
-    if(argc > 0)
-        yyin = fopen(argv[0], "r");
-    else
-        yyin = stdin;
-    yylex();
-    if(lexically_correct)
-        printf("Lexically correct\n");
-    printf("----------------------------------------\n");
-    return 0;
 }
